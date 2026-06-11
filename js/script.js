@@ -246,7 +246,10 @@ if (rotator) {
 			const itemAngle = Number(el.dataset.angle);
 			const rel = (itemAngle + total + 360) % 360;
 			const norm = Math.abs(rel > 180 ? 360 - rel : rel);
-			el.style.opacity = String(Math.max(0.3, 1 - norm / 180));
+			// keep cards mostly opaque (less see-through) while the full ring still rotates
+			el.style.opacity = String(Math.max(0.82, 1 - norm / 360));
+			// layer front cards above back cards so they overlap cleanly
+			el.style.zIndex = String(Math.round(360 - norm));
 		});
 	};
 
@@ -584,6 +587,26 @@ if (revealEls.length) {
 		{ threshold: 0.2 }
 	);
 	revealEls.forEach((el) => revealObs.observe(el));
+}
+
+// ---- Blog category filter ----
+const blogCats = document.querySelectorAll('.blog-cat');
+if (blogCats.length) {
+	const cards = Array.from(document.querySelectorAll('.blog-card'));
+	const featured = document.querySelector('.blog-featured');
+	const tagText = (el) => {
+		const tag = el.querySelector('.bc-tag, .bf-tag');
+		return tag ? tag.textContent.trim().toLowerCase() : '';
+	};
+	blogCats.forEach((btn) => {
+		btn.addEventListener('click', () => {
+			blogCats.forEach((b) => b.classList.remove('active'));
+			btn.classList.add('active');
+			const cat = btn.textContent.trim().toLowerCase();
+			cards.forEach((c) => { c.style.display = (cat === 'all' || tagText(c) === cat) ? '' : 'none'; });
+			if (featured) featured.style.display = (cat === 'all' || tagText(featured) === cat) ? '' : 'none';
+		});
+	});
 }
 
 // ---- Contact form ----
