@@ -36,7 +36,7 @@ const productLinks = [
 ];
 
 const companyLinks = [
-	{ title: 'About Us', href: '#', description: 'Learn more about our story and team', icon: 'users' },
+	{ title: 'About Us', href: 'about.html', description: 'Learn more about our story and team', icon: 'users' },
 	{ title: 'Customer Stories', href: '#', description: 'See how we’ve helped our clients succeed', icon: 'star' },
 	{ title: 'Partnerships', href: '#', description: 'Collaborate with us for mutual growth', icon: 'handshake' },
 ];
