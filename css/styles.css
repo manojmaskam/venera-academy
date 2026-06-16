@@ -985,7 +985,7 @@ ul { list-style: none; }
 }
 
 /* ---- Top Courses (image cards) ---- */
-.courses { padding: 0rem 0; background: linear-gradient(to bottom, var(--background), color-mix(in srgb, var(--brand) 4%, var(--background))); }
+.courses { padding: 3rem 0; background: linear-gradient(to bottom, var(--background), color-mix(in srgb, var(--brand) 4%, var(--background))); }
 .courses-inner { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
 
 .feature-grid {
