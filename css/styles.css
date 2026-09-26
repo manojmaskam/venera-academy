@@ -1100,7 +1100,7 @@ ul { list-style: none; }
 }
 /* On phones the copy runs the full width, so the side arrows would sit on
    top of it — pair them in the free bottom-right corner instead. */
-@media (max-width: 767px) {
+@media (max-width: 640px) {
 	.hero-nav { top: auto; bottom: 1.25rem; transform: none; width: 2.4rem; height: 2.4rem; }
 	.hero-nav svg { width: 1.05rem; height: 1.05rem; }
 	.hero-nav--prev { left: auto; right: 4rem; }
@@ -1122,8 +1122,17 @@ ul { list-style: none; }
 	width: 100%;
 	padding: 3rem 1.5rem 4rem;
 }
+/* Tablets get the desktop hero, not a squashed phone one: same tall panel,
+   same vertically centred copy. */
+@media (min-width: 641px) {
+	/* A tablet's viewport is far squarer than a laptop's, so an 88vh panel
+	   would crop these 2:1 photos to a face-filling close-up. A shorter panel
+	   keeps the frame near the photo's own ratio, the way it reads on a
+	   desktop. */
+	.hero-inner { min-height: 64vh; display: flex; align-items: center; padding: 5rem 4.25rem; }
+}
 @media (min-width: 1024px) {
-	.hero-inner { min-height: 88vh; display: flex; align-items: center; padding: 7rem 1.5rem; }
+	.hero-inner { min-height: 88vh; padding: 7rem 1.5rem; }
 }
 
 .hero-content { max-width: 36rem; text-align: left; }
