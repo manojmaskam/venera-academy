@@ -3770,7 +3770,9 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	}
 	.hero-content { width: 100%; }
 
-	.hero-eyebrow { font-size: .66rem; letter-spacing: .12em; }
+	/* inline-flex would make the phone break its own flex item, so the
+	   eyebrow goes back to a block for the two-line treatment */
+	.hero-eyebrow { display: block; font-size: .66rem; letter-spacing: .12em; line-height: 1.5; }
 	.hero-title { margin-top: .9rem; }
 	.hero-title--sculpt .ht-sculpt { font-size: clamp(2.7rem, 15.5vw, 4rem); }
 	.hero-title--sculpt .ht-future { font-size: clamp(1.55rem, 8.6vw, 2.5rem); }
