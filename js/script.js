@@ -769,7 +769,10 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	var next = hero.querySelector('.hero-nav--next');
 	var index = 0;
 	var timer = null;
-	var DELAY = 5000;
+	// phones get a quicker rotation — the hero fills the whole screen there,
+	// so a slide that lingers is the only thing the visitor is looking at
+	var PHONE = window.matchMedia('(max-width: 640px)');
+	function delay() { return PHONE.matches ? 3000 : 5000; }
 
 	function show(i) {
 		index = (i + slides.length) % slides.length;
@@ -780,7 +783,7 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 		stop();
 		// autoplay is motion the visitor did not ask for — honour the setting
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-		timer = setInterval(function () { show(index + 1); }, DELAY);
+		timer = setInterval(function () { show(index + 1); }, delay());
 	}
 	function stop() { if (timer) { clearInterval(timer); timer = null; } }
 
@@ -795,6 +798,9 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	document.addEventListener('visibilitychange', function () {
 		if (document.hidden) stop(); else start();
 	});
+
+	// re-time the loop if the viewport crosses the breakpoint (rotation)
+	if (PHONE.addEventListener) PHONE.addEventListener('change', start);
 
 	start();
 })();
