@@ -3850,6 +3850,14 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
    full width — ~768x576, taller than the checklist it introduces. Cap it to
    a modest centred block instead. */
 @media (min-width: 641px) and (max-width: 899px) {
-	.cm-group--split .cm-shot { max-width: 24rem; margin-inline: auto; width: 100%; }
-	.cm-group--split .cm-shot img { aspect-ratio: 3 / 2; }
+	/* Full width of the list it introduces, but shallow: a 4:3 photo ran
+	   768x576 and towered over the checklist, while a centred 24rem block
+	   floated free of it. Matching the list's edges at 16:9 reads as one
+	   unit and halves the height. */
+	.cm-group--split .cm-shot { max-width: none; width: 100%; }
+	.cm-group--split .cm-shot img { aspect-ratio: 2 / 1; }
+	/* the tilt and the gold block behind it are a lot at this size */
+	.cm-group--split .cm-shot img,
+	.cm-group--split.cm-group--flip .cm-shot img { transform: rotate(.8deg); }
+	.cm-group--split .cm-shot::before { inset: 0 0 1rem 1rem; }
 }
