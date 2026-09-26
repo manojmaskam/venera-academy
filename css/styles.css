@@ -3699,29 +3699,29 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
    lower with photo showing above it. Appended last: the site-wide gold-foil
    heading rules re-declare .hero-title, so an earlier rule loses on order. */
 @media (max-width: 640px) {
-	/* One screenful: the whole hero — copy, both CTAs and the slide arrows —
-	   fits without scrolling. svh keeps it right while the URL bar collapses. */
-	.hero { height: 100svh; min-height: 100svh; max-height: 100svh; }
+	/* Phones show the photo at its own 2:1, the way a desktop does. A 375px
+	   screen makes that panel ~190px tall, which no overlaid headline fits
+	   inside — so the photo becomes a banner and the copy stacks beneath it
+	   rather than being cropped into a zoomed slice to make room. */
+	.hero { height: auto; min-height: 0; max-height: none; display: block; }
+	.hero-photo {
+		position: relative;
+		aspect-ratio: 2 / 1;
+		background: #0B0B0C;
+	}
+	.hero-photo img { object-position: right center; }
+	/* nothing sits on the photo now, so the scrim only has to seat it
+	   against the copy below */
+	.hero-photo::after {
+		background: linear-gradient(to bottom, transparent 55%, rgba(11, 11, 12, .55) 88%, #0B0B0C 100%);
+	}
 	.hero-inner {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		padding-top: 5rem;
-		/* clamp keeps the copy off the bottom on tall phones without pushing
-		   it off-screen on short ones, since the hero can no longer grow */
-		padding-bottom: calc(clamp(2.25rem, 10.5svh, 6rem) + env(safe-area-inset-bottom, 0px));
+		display: block;
+		height: auto;
+		min-height: 0;
+		padding: 1.5rem 1.25rem calc(2.25rem + env(safe-area-inset-bottom, 0px));
 	}
 	.hero-content { width: 100%; }
-	/* portrait crops: keep the subject's face above the copy */
-	.hero-photo img { object-position: center top; }
-	/* the side-to-side scrim does nothing once the copy sits at the bottom —
-	   add a bottom-up one so the CTAs stay legible over pale photos */
-	.hero-photo::after {
-		background:
-			linear-gradient(to top, rgba(11, 11, 12, .92) 0%, rgba(11, 11, 12, .72) 32%, rgba(11, 11, 12, .18) 58%, transparent 78%),
-			linear-gradient(to right, rgba(11, 11, 12, .5), rgba(11, 11, 12, .15) 60%, transparent);
-	}
 
 	.hero-eyebrow { font-size: .62rem; letter-spacing: .18em; }
 	/* the trailing rule stranded itself beside a two-line eyebrow on phones */
