@@ -1125,11 +1125,16 @@ ul { list-style: none; }
 /* Tablets get the desktop hero, not a squashed phone one: same tall panel,
    same vertically centred copy. */
 @media (min-width: 641px) {
-	/* A tablet's viewport is far squarer than a laptop's, so an 88vh panel
-	   would crop these 2:1 photos to a face-filling close-up. A shorter panel
-	   keeps the frame near the photo's own ratio, the way it reads on a
-	   desktop. */
-	.hero-inner { min-height: 64vh; display: flex; align-items: center; padding: 5rem 4.25rem; }
+	/* Tie the panel's height to its WIDTH, not the viewport height: at 50vw
+	   the frame is the photo's own 2:1, so a tablet shows the same crop a
+	   desktop does instead of a zoomed-in slice. Sizing off vh is what made
+	   a squarer tablet viewport blow the photo up. */
+	.hero-inner {
+		min-height: 50vw;
+		display: flex;
+		align-items: center;
+		padding: 2.25rem 4.25rem;
+	}
 }
 @media (min-width: 1024px) {
 	.hero-inner { min-height: 88vh; padding: 7rem 1.5rem; }
@@ -3750,4 +3755,20 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
    the slideshow skips it (see the reel() filter in script.js). */
 @media (min-width: 641px) {
 	.hero-slide--phone { display: none; }
+}
+
+/* ===== Tablet: hold the hero at the photo's 2:1 =====
+   A 50vw panel only reads like the desktop one if the copy fits inside it.
+   At desktop sizes the lockup is ~470px tall, which would push a 768px-wide
+   panel back to 1.4:1, so the type steps down across the tablet range only. */
+@media (min-width: 641px) and (max-width: 1023px) {
+	.hero-eyebrow { font-size: .7rem; letter-spacing: .18em; }
+	.hero-title { margin-top: 1rem; }
+	.hero-title--sculpt .ht-sculpt { font-size: clamp(2.6rem, 9vw, 4.5rem); }
+	.hero-title--sculpt .ht-future { font-size: clamp(1.5rem, 5vw, 2.5rem); }
+	.hero-title--sculpt .ht-with { margin-top: .35em; font-size: clamp(.95rem, 2.4vw, 1.25rem); }
+	.hero-sub { margin-top: 1rem; font-size: .95rem; line-height: 1.6; }
+	.hero-actions { margin-top: 1.5rem; }
+	.hero-cta { padding: .85rem 1.6rem; font-size: .78rem; }
+	.hero-location { margin-top: 1.1rem; font-size: .82rem; }
 }
