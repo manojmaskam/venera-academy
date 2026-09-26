@@ -1161,12 +1161,7 @@ ul { list-style: none; }
 	text-transform: uppercase;
 	color: rgba(255, 255, 255, .85);
 }
-.hero-eyebrow::after {
-	content: '';
-	width: 3.5rem;
-	height: 1px;
-	background: rgba(255, 255, 255, .5);
-}
+.hero-eyebrow::after { display: none; }
 
 .hero-title {
 	margin-top: 1.5rem;
@@ -3750,8 +3745,6 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-content { width: 100%; }
 
 	.hero-eyebrow { font-size: .62rem; letter-spacing: .18em; }
-	/* the trailing rule stranded itself beside a two-line eyebrow on phones */
-	.hero-eyebrow::after { display: none; }
 	.hero-title { margin-top: .9rem; }
 	.hero-title--sculpt .ht-sculpt { font-size: clamp(2.2rem, 9.5vw, 3.4rem); }
 	.hero-title--sculpt .ht-future { font-size: clamp(1.3rem, 5.4vw, 2rem); }
