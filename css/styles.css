@@ -3740,7 +3740,15 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	   headline, so the phone panel is 4:3 — deep enough for the lockup while
 	   still showing the subject rather than a zoomed slice of her. */
 	.hero { height: auto; min-height: 0; max-height: none; }
-	.hero-photo { aspect-ratio: 5 / 9; max-height: 80svh; background: #0B0B0C; }
+	/* width: 100% matters — with aspect-ratio alone, max-height caps the
+	   height and the ratio then derives a NARROWER width, which left a black
+	   strip down the right of the panel. */
+	.hero-photo {
+		width: 100%;
+		aspect-ratio: 5 / 9;
+		max-height: 80svh;
+		background: #0B0B0C;
+	}
 	.hero-photo img { object-position: 72% center; }
 	/* the photo runs behind the copy, so the scrim has to carry the text:
 	   dark from the bottom, lighter over the subject */
