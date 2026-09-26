@@ -3724,6 +3724,8 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	   model's face — drop them on phones; the slideshow still auto-advances. */
 	.hero-nav { display: none; }
 
+	.hero-slide--phone { display: block; }
+
 	/* Keep the phone hero in colour — the grayscale tint exists only to tame
 	   the magenta cast in the desktop PNG, which mobile no longer loads. */
 	.hero-slide--tinted { filter: brightness(.92) contrast(1.03); }
@@ -3733,4 +3735,10 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	   screen inside the fixed-height hero — so trim the next section instead. */
 	.about { padding-top: 1.25rem; }
 	.about-cols { gap: 1.75rem; }
+}
+
+/* A slide that only runs on phones. Above the breakpoint it is hidden and
+   the slideshow skips it (see the reel() filter in script.js). */
+@media (min-width: 641px) {
+	.hero-slide--phone { display: none; }
 }

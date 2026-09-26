@@ -774,9 +774,18 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	var PHONE = window.matchMedia('(max-width: 640px)');
 	function delay() { return PHONE.matches ? 3000 : 5000; }
 
+	// some slides only earn their place on a phone — CSS hides them above the
+	// breakpoint, so the rotation has to skip them or it plays a blank beat
+	function reel() {
+		return [].filter.call(slides, function (s) {
+			return PHONE.matches || !s.classList.contains('hero-slide--phone');
+		});
+	}
 	function show(i) {
-		index = (i + slides.length) % slides.length;
-		slides.forEach(function (s, n) { s.classList.toggle('is-active', n === index); });
+		var list = reel();
+		index = (i + list.length) % list.length;
+		slides.forEach(function (s) { s.classList.remove('is-active'); });
+		list[index].classList.add('is-active');
 	}
 	function go(step) { show(index + step); start(); }
 	function start() {
@@ -800,7 +809,9 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	});
 
 	// re-time the loop if the viewport crosses the breakpoint (rotation)
-	if (PHONE.addEventListener) PHONE.addEventListener('change', start);
+	// crossing the breakpoint changes both the pace and which slides are in
+	// play, so re-seat the rotation from the top rather than only re-timing it
+	if (PHONE.addEventListener) PHONE.addEventListener('change', function () { show(0); start(); });
 
 	start();
 })();
