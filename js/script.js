@@ -137,8 +137,19 @@ menuToggle.addEventListener('click', () => {
 mobileMenu.addEventListener('click', (e) => {
 	if (e.target.closest('a')) setMobile(false);
 });
+// On a tablet the drawer only covers half the screen, so a tap on the page
+// beside it should dismiss it. The toggle handles its own clicks.
+document.addEventListener('pointerdown', (e) => {
+	if (!mobileMenu.classList.contains('open')) return;
+	if (mobileMenu.contains(e.target) || menuToggle.contains(e.target)) return;
+	setMobile(false);
+});
+document.addEventListener('keydown', (e) => {
+	if (e.key === 'Escape' && mobileMenu.classList.contains('open')) setMobile(false);
+});
 window.addEventListener('resize', () => {
-	if (window.innerWidth >= 768 && mobileMenu.classList.contains('open')) setMobile(false);
+	// the header switches to the full bar at 1024px, not 768px
+	if (window.innerWidth >= 1024 && mobileMenu.classList.contains('open')) setMobile(false);
 });
 
 // ---- Scroll effect on header ----
