@@ -3830,13 +3830,23 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 @media (max-width: 1023px) {
 	/* align-items: center on the grid version would centre every item once
 	   this is a column flex box, so state the cross-axis alignment here */
-	.about-cols { display: flex; flex-direction: column; align-items: stretch; gap: 1.5rem; }
+	/* One measure for the whole stack, centred in the section: the heading ran
+	   the full width while the paragraph and the photo capped at 34rem, so the
+	   block sat hard against the left edge with a ragged right side. */
+	.about-cols {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1.5rem;
+		max-width: 34rem;
+		margin-inline: auto;
+	}
 	/* the two-column rules above have nothing left to act on once stacked */
 	.about-cols .about-col-right { position: static; align-self: stretch; }
 	.about-col-left { display: contents; }
 	.about-eyebrow { order: 1; }
 	.about-title { order: 2; }
 	.about-col-left .about-text { order: 3; }
-	.about-col-right { order: 4; margin-inline: 0; max-width: 34rem; }
+	.about-col-right { order: 4; margin-inline: 0; max-width: none; }
 	.about-btn { order: 5; align-self: center; }
 }
