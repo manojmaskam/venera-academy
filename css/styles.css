@@ -3820,7 +3820,18 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-location { margin-top: clamp(1.25rem, 2vw, 2rem); font-size: clamp(.85rem, .58vw + .48rem, .9rem); }
 	.hero-location svg { width: clamp(.95rem, .5vw, 1.05rem); height: clamp(.95rem, .5vw, 1.05rem); }
 }
-}
 
-
+/* ===== Phones: About reads copy -> image -> button =====
+   The desktop order is image left, copy right, which stacks image-first on
+   a phone. Dissolving the copy column with display: contents lets its
+   children and the image block share one flex order, so the heading leads
+   and the About Us button closes the section under the photo. */
+@media (max-width: 640px) {
+	.about-cols { display: flex; flex-direction: column; gap: 1.5rem; }
+	.about-col-left { display: contents; }
+	.about-eyebrow { order: 1; }
+	.about-title { order: 2; }
+	.about-col-left .about-text { order: 3; }
+	.about-col-right { order: 4; margin-inline: 0; }
+	.about-btn { order: 5; justify-self: start; align-self: start; }
 }
