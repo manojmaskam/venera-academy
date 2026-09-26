@@ -51,7 +51,7 @@ const companyLinks2 = [
 
 // ---- Renderers ----
 const listItem = (item) => `
-	<a href="${item.href}" class="list-item">
+	<a href="${item.href}" class="list-item" title="${item.title}">
 		<div class="icon-box">${svg(item.icon)}</div>
 		<div class="text">
 			<span class="title">${item.title}</span>
@@ -60,7 +60,7 @@ const listItem = (item) => `
 	</a>`;
 
 const listLink = (item) => `
-	<a href="${item.href}" class="list-link">${svg(item.icon)}<span>${item.title}</span></a>`;
+	<a href="${item.href}" class="list-link" title="${item.title}">${svg(item.icon)}<span>${item.title}</span></a>`;
 
 const renderLi = (items, fn) => items.map((i) => `<li>${fn(i)}</li>`).join('');
 
@@ -98,6 +98,12 @@ navItems.forEach((item) => {
 		trigger.setAttribute('aria-expanded', 'false');
 	});
 	trigger.addEventListener('click', (e) => {
+		// The Courses trigger is a real link to courses.html. On a pointer
+		// device the dropdown has already opened on hover, so let the click
+		// through; only hijack it as a toggle where hover never fires.
+		const href = trigger.getAttribute('href');
+		const isLink = href && href !== '#';
+		if (isLink && window.matchMedia('(hover: hover)').matches) return;
 		e.preventDefault();
 		const isOpen = item.classList.toggle('open');
 		trigger.setAttribute('aria-expanded', String(isOpen));
@@ -152,12 +158,12 @@ const COURSE_ICONS = {
 };
 
 const courses = [
-	{ key: 'makeup', title: 'Makeup Artist', href: 'makeup-artist.html', img: 'assets/img/imgi_21_g2.png', description: 'Bridal, HD, party, fashion & airbrush makeup with hands-on training and pro kits.' },
-	{ key: 'hair', title: 'Hair Stylist', href: 'hair-stylist.html', img: 'assets/img/imgi_22_g3.png', description: 'Haircuts, coloring, keratin, smoothening & bridal hair styling techniques.' },
-	{ key: 'cosmo', title: 'Cosmetologist', href: 'cosmetologist.html', img: 'assets/img/imgi_24_g5.png', description: 'Advanced skin, hair & beauty therapy that blends science with practical skill.' },
-	{ key: 'beautician', title: 'Beautician', href: 'beautician.html', img: 'assets/img/imgi_25_g6.png', description: 'Facials, waxing, threading, grooming & basic makeup — ideal for beginners.' },
-	{ key: 'nail', title: 'Nail Art', href: 'nail.html', img: 'assets/img/imgi_26_g7.png', description: 'Manicure, pedicure, gel, acrylic extensions & creative nail art designs.' },
-	{ key: 'skin', title: 'Skin Specialist', href: 'skin-specialist.html', img: 'assets/img/imgi_27_g8.png', description: 'Facials, peels, clean-ups & advanced treatments for healthy, glowing skin.' },
+	{ key: 'makeup', title: 'Makeup Artist', href: 'makeup-artist.html', img: 'assets/img/makeup-artist-course-card.jpg', alt: 'Makeup artist applying a bridal look during the Makeup Artist course at Venera Academy Dilsukhnagar', description: 'Bridal, HD, party, fashion & airbrush makeup with hands-on training and pro kits.' },
+	{ key: 'hair', title: 'Hair Stylist', href: 'hair-stylist.html', img: 'assets/img/hair-stylist-course-card.jpg', alt: 'Student cutting and styling hair during the Hair Stylist course at Venera Academy Dilsukhnagar', description: 'Haircuts, coloring, keratin, smoothening & bridal hair styling techniques.' },
+	{ key: 'cosmo', title: 'Cosmetologist', href: 'cosmetologist.html', img: 'assets/img/cosmetology-course-card.jpg', alt: 'Cosmetology student carrying out a professional skin and beauty therapy treatment', description: 'Advanced skin, hair & beauty therapy that blends science with practical skill.' },
+	{ key: 'beautician', title: 'Beautician', href: 'beautician.html', img: 'assets/img/beautician-course-card.jpg', alt: 'Beautician student performing a facial treatment during hands-on salon training', description: 'Facials, waxing, threading, grooming & basic makeup — ideal for beginners.' },
+	{ key: 'nail', title: 'Nail Art', href: 'nail.html', img: 'assets/img/nail-art-course-card.jpg', alt: 'Nail technician creating a nail art design during the Nail Art course in Hyderabad', description: 'Manicure, pedicure, gel, acrylic extensions & creative nail art designs.' },
+	{ key: 'skin', title: 'Skin Specialist', href: 'skin-specialist.html', img: 'assets/img/skin-specialist-course-card.jpg', alt: 'Skin specialist student performing a facial treatment during advanced skin training', description: 'Facials, peels, clean-ups & advanced treatments for healthy, glowing skin.' },
 ];
 
 const featureGrid = document.getElementById('feature-grid');
@@ -165,9 +171,9 @@ if (featureGrid) {
 	featureGrid.innerHTML = courses
 		.map(
 			(c) => `
-		<a class="course-img-card reveal reveal-up" href="${c.href}">
+		<a class="course-img-card reveal reveal-up" href="${c.href}" title="${c.title} Course">
 			<div class="cic-media">
-				<img src="${c.img}" alt="${c.title}" loading="lazy">
+				<img src="${c.img}" alt="${c.alt}" title="${c.title} Course in Hyderabad" width="1200" height="896" loading="lazy" decoding="async">
 				<span class="cic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${COURSE_ICONS[c.key]}</svg></span>
 			</div>
 			<div class="cic-body">
@@ -184,124 +190,147 @@ if (featureGrid) {
 
 // ---- 3D Circular Gallery ----
 const galleryItems = [
-	{ url: 'assets/img/imgi_21_g2.png', title: 'Bridal Makeup' },
-	{ url: 'assets/img/imgi_22_g3.png', title: 'Hair Styling' },
-	{ url: 'assets/img/imgi_24_g5.png', title: 'HD Makeup' },
-	{ url: 'assets/img/imgi_25_g6.png', title: 'Nail Art' },
-	{ url: 'assets/img/imgi_26_g7.png', title: 'Skin & Facial' },
-	{ url: 'assets/img/imgi_27_g8.png', title: 'Student Showcase' },
-	{ url: 'assets/img/imgi_28_g9.png', title: 'Salon Training' },
-	{ url: 'assets/img/imgi_29_g10.png', title: 'Cosmetology Lab' },
-	{ url: 'assets/img/imgi_30_g11.png', title: 'Airbrush Makeup' },
-	{ url: 'assets/img/imgi_31_g12.png', title: 'Graduation Day' },
+	{ slug: 'bridal-makeup-portrait', title: 'Bridal Makeup', alt: 'Finished bridal makeup look with full base, eyes and lip' },
+	{ slug: 'hairdresser-precision-cutting', title: 'Precision Cutting', alt: 'Precision haircut being sectioned and cut at the styling chair' },
+	{ slug: 'smoky-eye-makeup-portrait', title: 'HD & Smokey Eye', alt: 'Smokey eye makeup blended over an HD base' },
+	{ slug: 'nail-art-crystal-extensions', title: 'Nail Extensions', alt: 'Crystal-set nail extensions shaped and finished' },
+	{ slug: 'hydra-facial-treatment', title: 'Skin & Facial Therapy', alt: 'Hydrating facial treatment being carried out in the skin lab' },
+	{ slug: 'bridal-hair-updo-styling', title: 'Bridal Hair', alt: 'Bridal updo being pinned and dressed' },
+	{ slug: 'creative-eye-makeup-crystals', title: 'Creative & Editorial', alt: 'Creative editorial eye makeup finished with crystal detail' },
+	{ slug: 'floral-nail-art', title: 'Nail Art', alt: 'Hand-painted floral nail art on a full set' },
+	{ slug: 'advanced-skin-treatment', title: 'Advanced Skin', alt: 'Advanced machine-assisted skin treatment in progress' },
+	{ slug: 'saree-draping-portrait', title: 'Saree Draping', alt: 'Saree draping finished as part of a complete bridal look' },
 ];
 
-const rotator = document.getElementById('cg-rotator');
-if (rotator) {
-	const AUTO_SPEED = 0.03;
-	const anglePerItem = 360 / galleryItems.length;
-	let radius = 600;
+const hgTrack = document.getElementById('hg-track');
+if (hgTrack) {
+	const prevBtn = document.getElementById('hg-prev');
+	const nextBtn = document.getElementById('hg-next');
 
-	// Build items
-	rotator.innerHTML = galleryItems
-		.map(
-			(item, i) => `
-		<div class="cg-item" role="group" aria-label="${item.title}" data-angle="${i * anglePerItem}">
-			<div class="cg-card">
-				<img src="${item.url}" alt="${item.title}" loading="lazy">
-				<div class="cg-caption">
+	// Build slides — render twice so we can loop seamlessly (infinite scroll)
+	const slide = (item, clone) => `
+		<div class="hg-item" role="group" aria-label="${item.title}"${clone ? ' aria-hidden="true"' : ''}>
+			<div class="hg-card">
+				<img src="assets/img/library/${item.slug}-800.webp" srcset="assets/img/library/${item.slug}-800.webp 800w, assets/img/library/${item.slug}.webp 1600w" sizes="280px" alt="${clone ? '' : item.alt}" title="${item.title}" width="800" height="533" loading="lazy" decoding="async">
+				<div class="hg-caption">
 					<h3>${item.title}</h3>
 					<p>Venera Academy, Dilsukhnagar</p>
 				</div>
 			</div>
-		</div>`
-		)
-		.join('');
+		</div>`;
+	hgTrack.innerHTML = galleryItems.map((i) => slide(i, false)).join('') + galleryItems.map((i) => slide(i, true)).join('');
 
-	const cgItems = Array.from(rotator.querySelectorAll('.cg-item'));
+	// Width of one full set of items (half the track) — the loop boundary
+	// Cache the loop boundary (half the track) — recompute on resize only,
+	// never per-frame, to avoid layout thrashing.
+	let halfWidth = hgTrack.scrollWidth / 2;
+	const recalc = () => { halfWidth = hgTrack.scrollWidth / 2; };
+	window.addEventListener('resize', recalc);
+	window.addEventListener('load', recalc);
 
-	const computeRadius = () => {
-		const w = window.innerWidth;
-		radius = w < 640 ? 320 : w < 1024 ? 460 : 600;
-	};
-	computeRadius();
-	window.addEventListener('resize', computeRadius);
-
-	const positionItems = () => {
-		cgItems.forEach((el) => {
-			const angle = Number(el.dataset.angle);
-			el.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-		});
+	// Keep scrollLeft within [0, halfWidth) so the loop is invisible
+	const wrap = () => {
+		if (hgTrack.scrollLeft >= halfWidth) hgTrack.scrollLeft -= halfWidth;
+		else if (hgTrack.scrollLeft < 0) hgTrack.scrollLeft += halfWidth;
 	};
 
-	const SPIN_SPEED = 0.12; // degrees per frame for the automatic spin
-	let rotation = 0;
-	let dragging = false;
-	let dragStartX = 0;
-	let dragStartRotation = 0;
-
-	const updateOpacity = () => {
-		const total = ((rotation % 360) + 360) % 360;
-		cgItems.forEach((el) => {
-			const itemAngle = Number(el.dataset.angle);
-			const rel = (itemAngle + total + 360) % 360;
-			const norm = Math.abs(rel > 180 ? 360 - rel : rel);
-			// keep cards mostly opaque (less see-through) while the full ring still rotates
-			el.style.opacity = String(Math.max(0.82, 1 - norm / 360));
-			// layer front cards above back cards so they overlap cleanly
-			el.style.zIndex = String(Math.round(360 - norm));
-		});
+	// Scroll by roughly one card width (plus gap) per button press
+	const scrollAmount = () => {
+		const first = hgTrack.querySelector('.hg-item');
+		const gap = parseFloat(getComputedStyle(hgTrack).columnGap || '0') || 0;
+		return first ? first.getBoundingClientRect().width + gap : hgTrack.clientWidth * 0.8;
 	};
 
-	const loop = () => {
-		// automatic spin whenever the user isn't dragging
-		if (!dragging) rotation += SPIN_SPEED;
-		rotator.style.transform = `rotateY(${rotation}deg)`;
-		updateOpacity();
-		requestAnimationFrame(loop);
-	};
-
-	// Manual spin via drag (mouse + touch)
-	const stage = document.getElementById('circular-gallery');
-	stage.addEventListener('pointerdown', (e) => {
-		dragging = true;
-		dragStartX = e.clientX;
-		dragStartRotation = rotation;
-		stage.setPointerCapture?.(e.pointerId);
+	prevBtn.addEventListener('click', () => {
+		hgTrack.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
 	});
-	stage.addEventListener('pointermove', (e) => {
-		if (!dragging) return;
-		// 0.4° of spin per pixel dragged
-		rotation = dragStartRotation + (e.clientX - dragStartX) * 0.4;
+	nextBtn.addEventListener('click', () => {
+		hgTrack.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
 	});
-	const endDrag = () => { dragging = false; };
-	stage.addEventListener('pointerup', endDrag);
-	stage.addEventListener('pointercancel', endDrag);
-	stage.addEventListener('pointerleave', endDrag);
 
-	// keep items positioned (radius can change on resize)
-	const reposition = () => positionItems();
-	window.addEventListener('resize', reposition);
-	positionItems();
-	requestAnimationFrame(loop);
+	hgTrack.addEventListener('scroll', wrap, { passive: true });
+
+	// ---- Slow auto-scroll (pauses on hover / interaction / when off-screen) ----
+	const AUTO_PX_PER_FRAME = 0.5; // gentle drift
+	let autoOn = true;
+	let onScreen = true;
+	let rafId = null;
+
+	const autoLoop = () => {
+		if (autoOn && onScreen) {
+			hgTrack.scrollLeft += AUTO_PX_PER_FRAME;
+			wrap();
+			rafId = requestAnimationFrame(autoLoop);
+		} else {
+			rafId = null; // stop the loop entirely while idle — saves the CPU/repaint
+		}
+	};
+	const startLoop = () => { if (rafId == null) rafId = requestAnimationFrame(autoLoop); };
+
+	const pause = () => { autoOn = false; };
+	const resume = () => { autoOn = true; startLoop(); };
+
+	// only animate while the gallery is actually visible on screen
+	if ('IntersectionObserver' in window) {
+		new IntersectionObserver((entries) => {
+			onScreen = entries[0].isIntersecting;
+			if (onScreen) startLoop();
+		}).observe(hgTrack);
+	}
+
+	// pause while the user is interacting, resume shortly after
+	let resumeTimer = null;
+	const pauseThenResume = () => {
+		pause();
+		clearTimeout(resumeTimer);
+		resumeTimer = setTimeout(resume, 2500);
+	};
+
+	hgTrack.addEventListener('mouseenter', pause);
+	hgTrack.addEventListener('mouseleave', resume);
+	hgTrack.addEventListener('pointerdown', pause);
+	hgTrack.addEventListener('touchstart', pause, { passive: true });
+	hgTrack.addEventListener('wheel', pauseThenResume, { passive: true });
+	prevBtn.addEventListener('click', pauseThenResume);
+	nextBtn.addEventListener('click', pauseThenResume);
+
+	// respect reduced-motion preference
+	if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		startLoop();
+	}
 }
 
 // ---- Why Choose Us: reasons grid + scroll text reveal ----
 const whyReasons = [
-	'Lakmé-certified experienced trainers',
-	'100% practical-based learning',
-	'Real model practice',
-	'Student portfolio photoshoots',
-	'Placement support',
-	'Centrally located in Dilsukhnagar',
-	'Certification recognized across India',
+	{ icon: 'award', title: 'Certified expert trainers', note: 'Working artists, not textbook teachers' },
+	{ icon: 'hand', title: '100% practical learning', note: 'On the tools from day one' },
+	{ icon: 'user', title: 'Real model practice', note: 'Live faces, hair and skin every week' },
+	{ icon: 'camera', title: 'Portfolio photoshoots', note: 'Leave with images clients will see' },
+	{ icon: 'briefcase', title: 'Placement support', note: 'Salon introductions and interview prep' },
+	{ icon: 'pin', title: 'Centrally located', note: 'Minutes from Dilsukhnagar metro' },
+	{ icon: 'seal', title: 'Recognised certification', note: 'Valid with salons across India' },
 ];
+
+const WHY_ICONS = {
+	award: '<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>',
+	hand: '<path d="M8 13V5a2 2 0 1 1 4 0v6"/><path d="M12 11V4a2 2 0 1 1 4 0v7"/><path d="M16 11V6a2 2 0 1 1 4 0v9a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6v-2a2 2 0 1 1 4 0"/>',
+	user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+	camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3.5"/>',
+	briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+	pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+	seal: '<circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>',
+};
 
 const whyGrid = document.getElementById('why-grid');
 if (whyGrid) {
-	const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 	whyGrid.innerHTML = whyReasons
-		.map((r) => `<li class="why-item"><span class="why-check">${check}</span><span>${r}</span></li>`)
+		.map(
+			(r) =>
+				`<li class="why-item">` +
+				`<span class="why-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${WHY_ICONS[r.icon]}</svg></span>` +
+				`<span class="why-body"><span class="why-title">${r.title}</span><span class="why-note">${r.note}</span></span>` +
+				`</li>`
+		)
 		.join('');
 }
 
@@ -311,7 +340,7 @@ const trWrap = document.getElementById('text-reveal');
 if (trText && trWrap) {
 	const words = (trText.dataset.text || '').split(' ');
 	// highlight the brand-relevant words
-	const brandWords = new Set(['Venera', 'Academy', 'Dilsukhnagar,', 'Lakmé-certified', '100%', 'India.']);
+	const brandWords = new Set(['Venera', 'Academy', 'Dilsukhnagar,', 'certified', '100%', 'India.']);
 	trText.innerHTML = words
 		.map((w) => {
 			const cls = brandWords.has(w) ? ' brand' : '';
@@ -319,17 +348,23 @@ if (trText && trWrap) {
 		})
 		.join(' ');
 
-	const sticky = trWrap.querySelector('.tr-sticky');
+	// the whole section is pinned via .why-track / .why-stage
+	const track = document.getElementById('why-track');
+	const stage = track ? track.querySelector('.why-stage') : null;
 	const fills = Array.from(trText.querySelectorAll('.tr-fill'));
 	const n = fills.length;
 
 	const updateReveal = () => {
-		const rect = trWrap.getBoundingClientRect();
-		// the block is pinned for (container height - sticky height) of scrolling
-		const stickyH = sticky ? sticky.offsetHeight : window.innerHeight;
-		const scrollable = trWrap.offsetHeight - stickyH;
+		const scrollEl = track || trWrap;
+		const rect = scrollEl.getBoundingClientRect();
+		// pinned for (track height - stage height) of scrolling
+		const stageH = stage ? stage.offsetHeight : window.innerHeight;
+		const scrollable = scrollEl.offsetHeight - stageH;
 		const scrolled = Math.min(Math.max(-rect.top, 0), scrollable);
-		const progress = scrollable > 0 ? scrolled / scrollable : 0;
+		// finish the reveal a touch before the block unpins so the words are
+		// fully filled by the time the grid below scrolls into view
+		const raw = scrollable > 0 ? scrolled / scrollable : 0;
+		const progress = Math.min(raw / 0.85, 1);
 		fills.forEach((el, i) => {
 			// each word reveals over a small overlapping window for a smooth sweep
 			const start = i / n;
@@ -348,7 +383,7 @@ const testimonials = [
 	{ quote: 'The bridal makeup training was incredible. I started my own studio within 3 months of finishing!', name: 'Sneha Reddy', role: 'Makeup Artist' },
 	{ quote: 'Hands-on practice with real models gave me so much confidence. Best decision I ever made.', name: 'Priya Sharma', role: 'Hair Stylist' },
 	{ quote: 'The best beauty academy in Dilsukhnagar. The trainers are patient, skilled and so supportive.', name: 'Ayesha Khan', role: 'Beautician' },
-	{ quote: 'Lakmé-powered curriculum plus placement support — I got hired right after my course ended.', name: 'Divya Naidu', role: 'Cosmetologist' },
+	{ quote: 'A hands-on curriculum plus placement support — I got hired right after my course ended.', name: 'Divya Naidu', role: 'Cosmetologist' },
 	{ quote: 'I learned nail art completely from scratch. Now I earn doing exactly what I love every day.', name: 'Lavanya Rao', role: 'Nail Artist' },
 ];
 
@@ -625,3 +660,93 @@ if (contactForm) {
 		}, 3500);
 	});
 }
+
+// ---- Active nav highlighting (current page) ----
+(function () {
+	const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+	const coursePages = ['courses.html', 'makeup-artist.html', 'hair-stylist.html', 'cosmetologist.html', 'beautician.html', 'nail.html', 'skin-specialist.html'];
+	const blogPages = ['blog.html', 'blog-post.html'];
+	const mark = (sel) => {
+		document.querySelectorAll(sel).forEach((a) => {
+			const href = (a.getAttribute('href') || '').split('/').pop().toLowerCase();
+			if (!href || href.charAt(0) === '#') return;
+			if (href === path || (blogPages.includes(path) && href === 'blog.html')) a.classList.add('active');
+		});
+	};
+	mark('.nav-link');
+	mark('.mobile-link');
+	if (coursePages.includes(path)) {
+		const item = document.querySelector('.nav-item[data-menu="product"]');
+		if (item) item.classList.add('active');
+		const msec = document.querySelector('.mobile-section');
+		if (msec) msec.classList.add('active');
+	}
+})();
+
+// ---- Smooth in-page anchor scroll offset for the sticky header ----
+(function () {
+	const header = document.querySelector('.header');
+	document.querySelectorAll('a[href^="#"]').forEach((a) => {
+		const hash = a.getAttribute('href');
+		if (!hash || hash.length < 2) return; // skip bare "#"
+		a.addEventListener('click', (e) => {
+			const target = document.getElementById(hash.slice(1));
+			if (!target) return;
+			e.preventDefault();
+			const offset = (header ? header.offsetHeight : 0) + 16;
+			const y = target.getBoundingClientRect().top + window.scrollY - offset;
+			window.scrollTo({ top: y, behavior: 'smooth' });
+			history.pushState(null, '', hash);
+		});
+	});
+})();
+
+// ---- Custom select dropdown (gold hover instead of native blue popup) ----
+document.querySelectorAll('.da-form select').forEach(function (sel) {
+	const wrap = document.createElement('div');
+	wrap.className = 'cselect';
+	const btn = document.createElement('button');
+	btn.type = 'button';
+	btn.className = 'cselect-btn';
+	const label = document.createElement('span');
+	label.className = 'cselect-label';
+	btn.appendChild(label);
+	btn.insertAdjacentHTML('beforeend', '<svg class="cselect-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+	const list = document.createElement('div');
+	list.className = 'cselect-list';
+	list.setAttribute('role', 'listbox');
+	Array.prototype.forEach.call(sel.options, function (o) {
+		const item = document.createElement('div');
+		item.className = 'cselect-opt' + (o.disabled ? ' disabled' : '');
+		item.setAttribute('role', 'option');
+		item.textContent = o.textContent;
+		if (o.selected) {
+			label.textContent = o.textContent;
+			if (o.value === '') label.classList.add('placeholder');
+			if (!o.disabled) item.classList.add('sel');
+		}
+		item.addEventListener('click', function () {
+			if (o.disabled) return;
+			sel.value = o.value;
+			sel.dispatchEvent(new Event('change', { bubbles: true }));
+			label.textContent = o.textContent;
+			label.classList.remove('placeholder');
+			list.querySelectorAll('.cselect-opt').forEach(function (x) { x.classList.remove('sel'); });
+			item.classList.add('sel');
+			wrap.classList.remove('open');
+		});
+		list.appendChild(item);
+	});
+	sel.classList.add('cselect-native');
+	sel.setAttribute('tabindex', '-1');
+	sel.parentNode.insertBefore(wrap, sel);
+	wrap.appendChild(btn);
+	wrap.appendChild(list);
+	wrap.appendChild(sel);
+	btn.addEventListener('click', function (e) {
+		e.stopPropagation();
+		document.querySelectorAll('.cselect.open').forEach(function (w) { if (w !== wrap) w.classList.remove('open'); });
+		wrap.classList.toggle('open');
+	});
+	document.addEventListener('click', function () { wrap.classList.remove('open'); });
+});

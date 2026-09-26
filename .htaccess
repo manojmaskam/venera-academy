@@ -1,0 +1,69 @@
+# ---- Custom 404 page ----
+ErrorDocument 404 /404.html
+
+# ---- Gzip compression ----
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+	AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+	AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# ---- Browser caching ----
+<IfModule mod_expires.c>
+	ExpiresActive On
+	# Images & fonts: cache long (they rarely change)
+	ExpiresByType image/jpeg "access plus 1 year"
+	ExpiresByType image/png "access plus 1 year"
+	ExpiresByType image/webp "access plus 1 year"
+	ExpiresByType image/svg+xml "access plus 1 year"
+	ExpiresByType image/x-icon "access plus 1 year"
+	ExpiresByType font/woff2 "access plus 1 year"
+	# CSS & JS: short cache so edits show up quickly (no version strings)
+	ExpiresByType text/css "access plus 2 hours"
+	ExpiresByType application/javascript "access plus 2 hours"
+	# HTML: always revalidate
+	ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# ---- Canonical host: force HTTPS and www (domain-agnostic) ----
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# 1. HTTP -> HTTPS
+	RewriteCond %{HTTPS} !=on
+	RewriteCond %{HTTP:X-Forwarded-Proto} !https
+	RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+	# 2. non-www -> www (matches the canonical tags)
+	RewriteCond %{HTTP_HOST} !^www\. [NC]
+	RewriteCond %{HTTP_HOST} !^localhost [NC]
+	RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+	# 3. /index.html -> / so only one URL serves the home page
+	RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+	RewriteRule ^index\.html$ / [L,R=301]
+</IfModule>
+
+# ---- Correct MIME types (WebP/AVIF/SVG must be served correctly to rank) ----
+<IfModule mod_mime.c>
+	AddType image/webp .webp
+	AddType image/avif .avif
+	AddType image/svg+xml .svg
+	AddType application/xml .xml
+	AddType text/plain .txt
+	AddType application/manifest+json .webmanifest
+</IfModule>
+
+# ---- sitemap.xml / robots.txt / llms.txt must stay fresh ----
+<IfModule mod_expires.c>
+	ExpiresByType application/xml "access plus 0 seconds"
+	ExpiresByType text/plain "access plus 1 hour"
+</IfModule>
+
+# ---- Security headers (indirect ranking / trust signal) ----
+<IfModule mod_headers.c>
+	Header set X-Content-Type-Options "nosniff"
+	Header set Referrer-Policy "strict-origin-when-cross-origin"
+	Header set X-Frame-Options "SAMEORIGIN"
+	Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
