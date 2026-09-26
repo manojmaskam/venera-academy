@@ -3821,17 +3821,22 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-location svg { width: clamp(.95rem, .5vw, 1.05rem); height: clamp(.95rem, .5vw, 1.05rem); }
 }
 
-/* ===== Phones: About reads copy -> image -> button =====
-   The desktop order is image left, copy right, which stacks image-first on
-   a phone. Dissolving the copy column with display: contents lets its
-   children and the image block share one flex order, so the heading leads
-   and the About Us button closes the section under the photo. */
-@media (max-width: 640px) {
-	.about-cols { display: flex; flex-direction: column; gap: 1.5rem; }
+/* ===== Phones and tablets: About reads copy -> image -> button =====
+   The desktop order is image left, copy right, which stacks image-first
+   once the columns collapse. Dissolving the copy column with
+   display: contents lets its children and the image block share one flex
+   order, so the heading leads and the About Us button closes the section
+   under the photo. */
+@media (max-width: 1023px) {
+	/* align-items: center on the grid version would centre every item once
+	   this is a column flex box, so state the cross-axis alignment here */
+	.about-cols { display: flex; flex-direction: column; align-items: stretch; gap: 1.5rem; }
+	/* the two-column rules above have nothing left to act on once stacked */
+	.about-cols .about-col-right { position: static; align-self: stretch; }
 	.about-col-left { display: contents; }
 	.about-eyebrow { order: 1; }
 	.about-title { order: 2; }
 	.about-col-left .about-text { order: 3; }
-	.about-col-right { order: 4; margin-inline: 0; }
+	.about-col-right { order: 4; margin-inline: 0; max-width: 34rem; }
 	.about-btn { order: 5; align-self: center; }
 }
