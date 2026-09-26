@@ -44,7 +44,7 @@ img {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	padding: 8rem 0 3rem;
+	padding: 8rem 0 4rem;
 	min-height: 34rem;
 }
 @media (min-width: 820px) {
@@ -56,7 +56,7 @@ img {
 		aspect-ratio: 2.4 / 1;
 		min-height: 30rem;
 		max-height: 44rem;
-		padding: 5rem 0 2rem;
+		padding: 5rem 0 3.5rem;
 	}
 }
 .chero--image .chero-bg { inset: 0; height: 100%; opacity: 1; z-index: -2; }
@@ -284,15 +284,15 @@ img {
    fades down into it (see .chero--image::after below). */
 .course-detail {
 	position: relative;
-	/* The hero's bottom 38% is a fade that ends on this exact background
-	   colour, so the section can be pulled up into that tail: it removes
-	   ~3rem of dead space under the hero copy and nothing is covered. */
-	margin-top: -3rem;
-	padding: 0 0 3rem;
+	/* This section starts below the hero with its own breathing room
+	   rather than being pulled up into the photo, which used to push the
+	   heading against the hero's bottom edge. */
+	margin-top: 0;
+	padding: var(--section-y) 0;
 	background: var(--background);
 }
 @media (max-width: 640px) {
-	.course-detail { margin-top: -1.5rem; padding: 0 0 2.5rem; }
+	.course-detail { margin-top: 0; }
 }
 .cd-inner { position: relative; z-index: 1; max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
 .cd-inner .section-eyebrow { display: inline-block; }
@@ -334,7 +334,7 @@ img {
 	font-weight: 600;
 	letter-spacing: .02em;
 }
-.course-modules { padding: 2rem 0 2rem; }
+.course-modules { padding: var(--section-y) 0; }
 .cm-inner { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
 .cm-head { display: flex; flex-direction: column; gap: .6rem; }
 .cm-head h2 { font-size: 2rem; font-weight: 500; letter-spacing: -0.03em; color: var(--foreground); max-width: 36rem; }
@@ -547,38 +547,95 @@ img {
 }
 
 /* certificate bar */
-.cm-cert { padding: 0 1.5rem 2rem; }
+.cm-cert { padding: 0 1.5rem var(--section-y); }
 .cm-cert-inner {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
 	max-width: var(--wrap);
 	margin: 0 auto;
-	background: color-mix(in srgb, var(--brand) 6%, var(--background));
-	border: 1px solid var(--border);
-	border-radius: .9rem;
-	padding: 1.25rem 1.75rem;
+	/* warm gradient rather than a flat tint, so the bar reads as a
+	   closing flourish for the module list instead of another card */
+	background:
+		radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent) 0%, transparent 55%),
+		radial-gradient(120% 160% at 100% 100%, color-mix(in srgb, #E0719B 16%, transparent) 0%, transparent 55%),
+		linear-gradient(120deg, color-mix(in srgb, var(--brand) 8%, var(--background)), color-mix(in srgb, #7C5CBF 7%, var(--background)));
+	border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--border));
+	border-radius: 1.1rem;
+	padding: 2rem 2.5rem;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 1rem;
+	gap: 1.5rem;
 	flex-wrap: wrap;
 }
-.cm-cert-inner p { font-size: .95rem; color: var(--muted-foreground); }
-.cm-cert-inner p strong { color: var(--brand); font-weight: 700; }
+/* decorative flourishes: Venus's scallop shell -- she is the goddess of
+   beauty the academy is named for -- behind the copy, and a laurel
+   wreath, the classical mark of achievement, beside the button.
+   z-index stays at 0: inside this isolated stacking context a negative
+   value would paint them behind the bar's own gradient background. */
+.cm-cert-inner::before,
+.cm-cert-inner::after {
+	content: '';
+	position: absolute;
+	z-index: 0;
+	pointer-events: none;
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+/* the copy and button ride above them */
+.cm-cert-inner p,
+.cm-cert-btn { position: relative; z-index: 1; }
+.cm-cert-inner::before {
+	width: 17rem;
+	height: 17rem;
+	left: -4rem;
+	bottom: -4rem;
+	opacity: .28;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50.0 86.0L7.1 69.4M50.0 86.0L14.0 57.4M50.0 86.0L24.0 48.0M50.0 86.0L36.4 42.1M50.0 86.0L50.0 40.0M50.0 86.0L63.6 42.1M50.0 86.0L76.0 48.0M50.0 86.0L86.0 57.4M50.0 86.0L92.9 69.4M4.1 82.8A8 8 0 0 1 7.1 69.4A8 8 0 0 1 14.0 57.4A8 8 0 0 1 24.0 48.0A8 8 0 0 1 36.4 42.1A8 8 0 0 1 50.0 40.0A8 8 0 0 1 63.6 42.1A8 8 0 0 1 76.0 48.0A8 8 0 0 1 86.0 57.4A8 8 0 0 1 92.9 69.4A8 8 0 0 1 95.9 82.8M4.1 82.8L50.0 86.0M95.9 82.8L50.0 86.0' fill='none' stroke='%23BF953F' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='90' r='5' fill='none' stroke='%23BF953F' stroke-width='1.6'/%3E%3C/svg%3E");
+}
+.cm-cert-inner::after {
+	width: 8.5rem;
+	height: 8.5rem;
+	right: 1.25rem;
+	top: -1.5rem;
+	opacity: .26;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M37.3 26.8A30 30 0 0 0 50.0 84.0' fill='none' stroke='%23BF953F' stroke-width='3' stroke-linecap='round'/%3E%3Cellipse cx='37.5' cy='35.3' rx='7.5' ry='3.4' transform='rotate(4.4 37.5 35.3)' fill='%23BF953F'/%3E%3Cellipse cx='29.2' cy='22.8' rx='7.5' ry='3.4' transform='rotate(-71.6 29.2 22.8)' fill='%23BF953F'/%3E%3Cellipse cx='32.6' cy='39.8' rx='7.5' ry='3.4' transform='rotate(-12.8 32.6 39.8)' fill='%23BF953F'/%3E%3Cellipse cx='20.9' cy='30.3' rx='7.5' ry='3.4' transform='rotate(-88.8 20.9 30.3)' fill='%23BF953F'/%3E%3Cellipse cx='29.1' cy='45.6' rx='7.5' ry='3.4' transform='rotate(-30.1 29.1 45.6)' fill='%23BF953F'/%3E%3Cellipse cx='15.2' cy='40.0' rx='7.5' ry='3.4' transform='rotate(-106.1 15.2 40.0)' fill='%23BF953F'/%3E%3Cellipse cx='27.6' cy='52.1' rx='7.5' ry='3.4' transform='rotate(-47.3 27.6 52.1)' fill='%23BF953F'/%3E%3Cellipse cx='12.6' cy='50.9' rx='7.5' ry='3.4' transform='rotate(-123.3 12.6 50.9)' fill='%23BF953F'/%3E%3Cellipse cx='28.0' cy='58.9' rx='7.5' ry='3.4' transform='rotate(-64.5 28.0 58.9)' fill='%23BF953F'/%3E%3Cellipse cx='13.4' cy='62.1' rx='7.5' ry='3.4' transform='rotate(-140.5 13.4 62.1)' fill='%23BF953F'/%3E%3Cellipse cx='30.5' cy='65.2' rx='7.5' ry='3.4' transform='rotate(-81.7 30.5 65.2)' fill='%23BF953F'/%3E%3Cellipse cx='17.4' cy='72.6' rx='7.5' ry='3.4' transform='rotate(-157.7 17.4 72.6)' fill='%23BF953F'/%3E%3Cellipse cx='34.6' cy='70.4' rx='7.5' ry='3.4' transform='rotate(-98.9 34.6 70.4)' fill='%23BF953F'/%3E%3Cellipse cx='24.4' cy='81.4' rx='7.5' ry='3.4' transform='rotate(-174.9 24.4 81.4)' fill='%23BF953F'/%3E%3Cellipse cx='40.2' cy='74.3' rx='7.5' ry='3.4' transform='rotate(-116.2 40.2 74.3)' fill='%23BF953F'/%3E%3Cellipse cx='33.7' cy='87.8' rx='7.5' ry='3.4' transform='rotate(-192.2 33.7 87.8)' fill='%23BF953F'/%3E%3Cellipse cx='46.6' cy='76.2' rx='7.5' ry='3.4' transform='rotate(-133.4 46.6 76.2)' fill='%23BF953F'/%3E%3Cellipse cx='44.4' cy='91.1' rx='7.5' ry='3.4' transform='rotate(-209.4 44.4 91.1)' fill='%23BF953F'/%3E%3Cpath d='M62.7 26.8A30 30 0 0 1 50.0 84.0' fill='none' stroke='%23BF953F' stroke-width='3' stroke-linecap='round'/%3E%3Cellipse cx='62.5' cy='35.3' rx='7.5' ry='3.4' transform='rotate(-4.4 62.5 35.3)' fill='%23BF953F'/%3E%3Cellipse cx='70.8' cy='22.8' rx='7.5' ry='3.4' transform='rotate(71.6 70.8 22.8)' fill='%23BF953F'/%3E%3Cellipse cx='67.4' cy='39.8' rx='7.5' ry='3.4' transform='rotate(12.8 67.4 39.8)' fill='%23BF953F'/%3E%3Cellipse cx='79.1' cy='30.3' rx='7.5' ry='3.4' transform='rotate(88.8 79.1 30.3)' fill='%23BF953F'/%3E%3Cellipse cx='70.9' cy='45.6' rx='7.5' ry='3.4' transform='rotate(30.1 70.9 45.6)' fill='%23BF953F'/%3E%3Cellipse cx='84.8' cy='40.0' rx='7.5' ry='3.4' transform='rotate(106.1 84.8 40.0)' fill='%23BF953F'/%3E%3Cellipse cx='72.4' cy='52.1' rx='7.5' ry='3.4' transform='rotate(47.3 72.4 52.1)' fill='%23BF953F'/%3E%3Cellipse cx='87.4' cy='50.9' rx='7.5' ry='3.4' transform='rotate(123.3 87.4 50.9)' fill='%23BF953F'/%3E%3Cellipse cx='72.0' cy='58.9' rx='7.5' ry='3.4' transform='rotate(64.5 72.0 58.9)' fill='%23BF953F'/%3E%3Cellipse cx='86.6' cy='62.1' rx='7.5' ry='3.4' transform='rotate(140.5 86.6 62.1)' fill='%23BF953F'/%3E%3Cellipse cx='69.5' cy='65.2' rx='7.5' ry='3.4' transform='rotate(81.7 69.5 65.2)' fill='%23BF953F'/%3E%3Cellipse cx='82.6' cy='72.6' rx='7.5' ry='3.4' transform='rotate(157.7 82.6 72.6)' fill='%23BF953F'/%3E%3Cellipse cx='65.4' cy='70.4' rx='7.5' ry='3.4' transform='rotate(98.9 65.4 70.4)' fill='%23BF953F'/%3E%3Cellipse cx='75.6' cy='81.4' rx='7.5' ry='3.4' transform='rotate(174.9 75.6 81.4)' fill='%23BF953F'/%3E%3Cellipse cx='59.8' cy='74.3' rx='7.5' ry='3.4' transform='rotate(116.2 59.8 74.3)' fill='%23BF953F'/%3E%3Cellipse cx='66.3' cy='87.8' rx='7.5' ry='3.4' transform='rotate(192.2 66.3 87.8)' fill='%23BF953F'/%3E%3Cellipse cx='53.4' cy='76.2' rx='7.5' ry='3.4' transform='rotate(133.4 53.4 76.2)' fill='%23BF953F'/%3E%3Cellipse cx='55.6' cy='91.1' rx='7.5' ry='3.4' transform='rotate(209.4 55.6 91.1)' fill='%23BF953F'/%3E%3C/svg%3E");
+}
+@media (max-width: 640px) {
+	.cm-cert-inner { padding: 1.75rem 1.5rem; gap: 1.25rem; }
+	.cm-cert-inner::before { width: 12rem; height: 12rem; left: -4rem; bottom: -4.5rem; }
+	.cm-cert-inner::after { width: 5.5rem; height: 5.5rem; right: .5rem; top: -1.25rem; }
+}
+.cm-cert-inner p { font-size: 1.05rem; line-height: 1.6; color: var(--foreground); max-width: 42rem; }
+.cm-cert-inner p strong {
+	background: var(--gold-grad);
+	background-size: 200% auto;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	font-weight: 700;
+}
+
 .cm-cert-btn {
 	flex: none;
 	background: var(--gold-grad);
 	background-size: 200% auto;
 	border: 1px solid transparent;
-	border-radius: .5rem;
-	padding: .65rem 1.4rem;
+	border-radius: 9999px;
+	padding: .85rem 2.25rem;
 	font-weight: 700;
-	font-size: .9rem;
+	font-size: .95rem;
+	letter-spacing: .01em;
 	color: var(--primary-foreground);
-	transition: background-position .4s ease, transform .15s;
+	box-shadow: 0 10px 26px -12px rgba(191, 149, 63, .9);
+	transition: background-position .4s ease, transform .15s, box-shadow .3s ease;
 }
-.cm-cert-btn:hover { background-position: right center; transform: translateY(-2px); }
+.cm-cert-btn:hover { background-position: right center; transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(191, 149, 63, .75); }
 
 /* FAQ accordion */
-.faq { padding: 2rem 0 2.5rem; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--brand) 4%, var(--background)), transparent); }
+.faq { padding: var(--section-y) 0; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--brand) 4%, var(--background)), transparent); }
 .faq-inner { max-width: 44rem; margin: 0 auto; padding: 0 1.5rem; }
 .faq-head { text-align: center; margin-bottom: 3rem; }
 .faq-head h2 { font-size: 1.85rem; font-weight: 600; letter-spacing: -0.02em; color: var(--foreground); }
@@ -659,11 +716,28 @@ img {
 	--accent-foreground: #FCF6BA;
 	--primary: #BF953F;
 	--primary-foreground: #0B0B0C;
+	/* One vertical rhythm for every section on every page. Sections used to
+	   set their own padding between 0 and 3.5rem, so the gap between two
+	   sections changed depending on which two they were. */
+	/* Height of the sticky header; anything that pins itself offsets by it.
+	   Everything is rem-based and the root scales 125% on desktop, so this
+	   one value tracks the header at every width. */
+	--header-h: 4.6rem;
+	--section-y: 2.5rem;
+	/* Why Choose Us -> Placement -> Gallery -> Testimonials read as one
+	   continuous run of proof, so they sit on a tighter rhythm than the
+	   rest of the page. */
+	--section-y-tight: 1.25rem;
 	--radius: 0.625rem;
 	--shadow: 0 4px 6px -1px rgb(0 0 0 / 0.50), 0 2px 4px -2px rgb(0 0 0 / 0.40);
 	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.40);
 	color-scheme: dark;
 }
+/* Section rhythm scales with the viewport: tighter on phones, roomier on
+   desktop, but always one value so every boundary matches. */
+@media (min-width: 768px) { :root { --section-y: 3rem; --section-y-tight: 1.5rem; } }
+@media (min-width: 1200px) { :root { --section-y: 3.5rem; --section-y-tight: 1.75rem; } }
+
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -982,7 +1056,56 @@ ul { list-style: none; }
 
 /* full-bleed background banner (dark panel + model on right) */
 .hero-photo { position: absolute; inset: 0; z-index: 0; background: linear-gradient(to right, #0B0B0C, #17120a 60%, #0B0B0C); }
+/* Slides stack in place and cross-fade; only .is-active is visible. The
+   right-hand crop keeps each photo's subject clear of the headline. */
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+.hero-slide {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity .9s ease;
+}
+.hero-slide.is-active { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
+
+/* slide controls */
+.hero-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 9999px;
+	color: #fff;
+	background: rgba(11, 11, 12, .35);
+	border: 1px solid rgba(255, 255, 255, .28);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	cursor: pointer;
+	transition: background-color .25s ease, border-color .25s ease, color .25s ease, transform .2s ease;
+}
+.hero-nav:hover { background: rgba(11, 11, 12, .6); border-color: var(--brand); color: var(--brand); }
+.hero-nav:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.hero-nav svg { width: 1.25rem; height: 1.25rem; }
+.hero-nav--prev { left: 1rem; }
+.hero-nav--next { right: 1rem; }
+@media (min-width: 1024px) {
+	.hero-nav { width: 3.25rem; height: 3.25rem; }
+	.hero-nav--prev { left: 1.75rem; }
+	.hero-nav--next { right: 1.75rem; }
+}
+/* On phones the copy runs the full width, so the side arrows would sit on
+   top of it — pair them in the free bottom-right corner instead. */
+@media (max-width: 767px) {
+	.hero-nav { top: auto; bottom: 1.25rem; transform: none; width: 2.4rem; height: 2.4rem; }
+	.hero-nav svg { width: 1.05rem; height: 1.05rem; }
+	.hero-nav--prev { left: auto; right: 4rem; }
+	.hero-nav--next { right: 1.25rem; }
+}
 /* left scrim so headline stays crisp over the panel */
 .hero-photo::after {
 	content: '';
@@ -1033,8 +1156,72 @@ ul { list-style: none; }
 	text-wrap: balance;
 }
 .hero-title em { font-style: italic; font-weight: 600; color: #D8B45A; }
+/* the sculpt lockup uses <em> for its gold words but not italics */
+.hero-title--sculpt em { font-style: normal; }
 @media (min-width: 768px) { .hero-title { font-size: 3rem; } }
 @media (min-width: 1280px) { .hero-title { font-size: 3.5rem; } }
+
+/* ---- "Sculpt Your Future" hero lockup ----
+   Three stacked lines in the sans stack (the reference is a heavy
+   grotesque, not the Playfair the other headlines use): a gold display
+   word, a white caps line under it, and a quiet signature line. */
+.hero-title--sculpt {
+	font-family: inherit;
+	display: block;
+	line-height: 1;
+	letter-spacing: -0.01em;
+	text-wrap: initial;
+}
+.hero-title--sculpt > span { display: block; }
+.ht-sculpt {
+	font-size: clamp(3.25rem, 13vw, 6.5rem);
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	text-transform: uppercase;
+}
+.ht-sculpt em { font-style: normal; font-weight: 800; }
+.ht-future {
+	margin-top: .12em;
+	font-size: clamp(1.85rem, 7.2vw, 3.6rem);
+	font-weight: 800;
+	letter-spacing: .01em;
+	text-transform: uppercase;
+	color: #fff;
+}
+.ht-with {
+	margin-top: .5em;
+	font-size: clamp(1rem, 3.2vw, 1.5rem);
+	font-weight: 500;
+	letter-spacing: .01em;
+	color: rgba(255, 255, 255, .92);
+}
+.ht-with em { font-style: normal; font-weight: 700; text-transform: uppercase; }
+@media (min-width: 768px) {
+	.hero-title--sculpt { font-size: inherit; }
+}
+/* The site-wide gold-foil rule clips a gradient to the whole .hero-title
+   and sets -webkit-text-fill-color: transparent, which the children
+   inherit — so each line has to state its own fill. Two classes deep to
+   outrank that rule wherever it sits in the file. */
+.hero-title--sculpt .ht-sculpt,
+.hero-title--sculpt .ht-with em {
+	background: var(--gold-grad);
+	background-size: 100% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+}
+.hero-title--sculpt .ht-future {
+	background: none;
+	-webkit-text-fill-color: #fff;
+	color: #fff;
+}
+.hero-title--sculpt .ht-with {
+	background: none;
+	-webkit-text-fill-color: rgba(255, 255, 255, .92);
+	color: rgba(255, 255, 255, .92);
+}
 
 .hero-sub {
 	margin-top: 1.5rem;
@@ -1053,6 +1240,24 @@ ul { list-style: none; }
 }
 
 .hero-btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+
+/* Phones: drop the copy further down so the photo breathes at the top, and
+   keep the two CTAs on one line by letting them share the width. */
+@media (max-width: 767px) {
+	.hero-inner { padding-top: 6.5rem; }
+	.hero-actions { margin-top: 1.75rem; gap: 1rem; }
+	.hero-btn-row { flex-wrap: nowrap; gap: .625rem; width: 100%; }
+	.hero-btn-row .hero-cta {
+		flex: 1 1 0;
+		min-width: 0;
+		justify-content: center;
+		padding: .875rem .75rem;
+		font-size: .72rem;
+		letter-spacing: .03em;
+		text-align: center;
+		white-space: nowrap;
+	}
+}
 
 /* gold discover/explore button */
 .hero-cta {
@@ -1101,8 +1306,10 @@ ul { list-style: none; }
 /* ---- About / Courses ---- */
 .about {
 	position: relative;
-	overflow: hidden;
-	padding: 2.5rem 0;
+	/* clip, not hidden: `hidden` makes this a scroll container and kills
+	   position: sticky on the portrait column below */
+	overflow: clip;
+	padding: var(--section-y) 0;
 	background: linear-gradient(to bottom, color-mix(in srgb, var(--brand) 5%, var(--background)), var(--background));
 }
 /* floral decoration behind the About Us button (full visibility) */
@@ -1130,10 +1337,20 @@ ul { list-style: none; }
 }
 
 /* About two-column ("Know more about us") */
-.about-cols { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; margin-bottom: 4rem; }
+.about-cols { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
 /* tablet (769–1023) + desktop: neat two-column layout */
+/* Columns stretch rather than float on their centres: the left column is
+   much taller (copy + framed photo + card), so centring left the portrait
+   hanging mid-air with dead space above and below it. Stretching lets the
+   portrait fill its column and the two sides square up. */
 @media (min-width: 769px) {
-	.about-cols { grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+	.about-cols { grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+	/* The left column is far taller (copy + framed photo + card). Centring
+	   left the portrait hanging mid-air; stretching turned it into a 1:2.3
+	   sliver. Instead it holds a 3:4 crop and sticks alongside the copy as
+	   that column scrolls past. */
+	.about-cols .about-col-right { position: sticky; top: 6rem; align-self: start; }
+	.about-photo { aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; }
 }
 @media (min-width: 1024px) { .about-cols { gap: 4rem; } }
 
@@ -1158,19 +1375,64 @@ ul { list-style: none; }
 .about-btn:hover { background-position: right center; transform: translateY(-2px); }
 
 /* small image + brown overlay card */
-/* 3.5rem here left an obvious hole between the button and the card, made
-   worse by the image sitting at 80% width and pushed right. */
 .about-feature { position: relative; margin-top: 1.5rem; max-width: 30rem; }
-.about-feature-img { display: block; width: 80%; margin-left: auto; border-radius: .3rem; box-shadow: var(--shadow); }
-.about-feature-card {
-	background: linear-gradient(160deg, #211a10, #14110b); color: #fff; padding: 1.6rem 1.75rem; border-radius: .3rem;
-	border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
-	margin-top: -3rem; position: relative; z-index: 2; width: 78%;
+/* Same offset gold frame the portrait opposite uses, so both columns
+   share one framing idiom instead of reading as two designs. It tracks
+   the image because it repeats the image's own 4/3 ratio. */
+.about-feature::before {
+	content: '';
+	position: absolute;
+	top: -1.25rem;
+	left: -1.25rem;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+	border-radius: .3rem;
+	z-index: 0;
+	pointer-events: none;
 }
-.about-feature-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; font-weight: 600; }
-.about-feature-card p { margin-top: .65rem; font-size: .9rem; line-height: 1.6; color: rgba(255, 255, 255, .82); }
+/* The image runs the full column and is cropped to landscape with its
+   focus held right of centre, so the card below overlaps empty frame
+   rather than the subject. It previously sat at 80% width pushed right
+   while the card took 62% from the left, which buried half the photo. */
+.about-feature-img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	object-position: center 40%;
+	border-radius: .3rem;
+	box-shadow: 0 25px 55px -20px rgba(0, 0, 0, .35);
+	position: relative;
+	z-index: 1;
+}
+/* Glass card: barely-there tint over a strong blur, so the photo reads
+   straight through it. The blur -- not opacity -- is what keeps the copy
+   legible, so the tint can stay this light. */
+.about-feature-card {
+	background: rgba(18, 13, 8, .10);
+	backdrop-filter: blur(14px) saturate(130%);
+	-webkit-backdrop-filter: blur(14px) saturate(130%);
+	color: #fff;
+	padding: 1.6rem 1.75rem;
+	border-radius: .6rem;
+	border: 1px solid rgba(255, 255, 255, .18);
+	box-shadow: 0 8px 32px -12px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .22);
+	margin-top: -3rem; position: relative; z-index: 2; width: 100%;
+}
+/* where the browser cannot blur, fall back to an opaque panel rather
+   than leaving white text on a bare photo */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.about-feature-card { background: linear-gradient(160deg, rgba(33, 26, 16, .94), rgba(20, 17, 11, .94)); }
+}
+.about-feature-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; font-weight: 600; text-shadow: 0 1px 12px rgba(0, 0, 0, .8), 0 0 24px rgba(0, 0, 0, .5); }
+.about-feature-card p { margin-top: .65rem; font-size: .9rem; line-height: 1.6; color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, .8), 0 0 20px rgba(0, 0, 0, .5); }
+/* Overlap the photo's bottom-RIGHT corner. The card is glass now, so a
+   wider panel still shows the photo through it rather than hiding it. */
 @media (min-width: 560px) {
-	.about-feature-card { position: absolute; left: 0; bottom: -1.5rem; margin-top: 0; width: 62%; }
+	.about-feature-card { position: absolute; left: auto; right: 0; bottom: -2rem; margin-top: 0; width: 80%; padding: 1.35rem 1.45rem; }
+	.about-feature-card h3 { font-size: 1.2rem; }
+	.about-feature-card p { font-size: .84rem; }
 }
 
 /* right framed portrait */
@@ -1226,6 +1488,7 @@ main { overflow-x: clip; }
 	color: rgba(243, 238, 226, .82);
 }
 .about-text strong { color: var(--brand); font-weight: 700; }
+
 
 .course-grid {
 	margin-top: 4rem;
@@ -1337,7 +1600,7 @@ main { overflow-x: clip; }
 }
 
 /* ---- Top Courses (image cards) ---- */
-.courses { padding: 0rem 0 2rem; background: linear-gradient(to bottom, var(--background), color-mix(in srgb, var(--brand) 4%, var(--background))); }
+.courses { padding: var(--section-y) 0; background: linear-gradient(to bottom, var(--background), color-mix(in srgb, var(--brand) 4%, var(--background))); }
 .courses-inner { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
 
 .feature-grid {
@@ -1411,15 +1674,17 @@ main { overflow-x: clip; }
 .course-img-card:hover .cic-link svg { transform: translateX(4px); }
 
 /* ---- Why Choose Us ---- */
-.why { padding: 2rem 0 1.5rem; }
+.why { padding: var(--section-y-tight) 0; }
 .why-head { max-width: 50rem; margin: 0 auto; text-align: center; padding: 0 1.5rem; }
 
 /* Pinned scroll stage: heading + reveal + reasons stay together while scrolling */
-.why-track { position: relative; height: 220vh; }
+.why-track { position: relative; height: 150vh; }
 .why-stage {
 	position: sticky;
-	top: 0;
-	min-height: 100vh;
+	/* pin BELOW the sticky header, not under it -- at top:0 the heading
+	   slid behind the nav bar as the section pinned */
+	top: var(--header-h);
+	min-height: calc(100vh - var(--header-h) - 2rem);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -1545,7 +1810,7 @@ main { overflow-x: clip; }
 .career {
 	position: relative;
 	overflow: hidden;
-	padding: 2.5rem 0;
+	padding: var(--section-y) 0;
 	background: linear-gradient(to bottom, color-mix(in srgb, var(--brand) 5%, var(--background)), var(--background));
 }
 .co-blur { position: absolute; border-radius: 9999px; filter: blur(60px); z-index: 0; }
@@ -1571,7 +1836,7 @@ main { overflow-x: clip; }
 
 .co-item { transition: transform .25s ease; }
 .co-item:hover { transform: translateY(-5px); }
-.co-item-head { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; }
+.co-item-head { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: .6rem; }
 .co-chip {
 	flex: none;
 	display: inline-flex;
@@ -1586,7 +1851,12 @@ main { overflow-x: clip; }
 }
 .co-item:hover .co-chip { box-shadow: 0 10px 22px -6px rgba(191, 149, 63, .55); transform: translateY(-2px); }
 .co-chip svg { width: 1.35rem; height: 1.35rem; }
-.co-item-head h3 { font-size: 1.15rem; font-weight: 600; color: var(--foreground); transition: color .3s; }
+/* The chip is top-aligned so a title that wraps to two lines keeps its
+   first line on the icon's line. The padding centres that first line
+   against the 2.75rem chip -- (2.75rem - 1.15rem x 1.35) / 2 = .59rem --
+   less ~2px, because the line box carries descender space the capitals
+   do not, so a mathematically centred line reads low. */
+.co-item-head h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.35; padding-top: .47rem; color: var(--foreground); transition: color .3s; }
 .co-item:hover .co-item-head h3 { color: var(--brand); }
 .co-item p { font-size: .88rem; line-height: 1.6; color: var(--muted-foreground); padding-left: 3.5rem; }
 
@@ -1630,9 +1900,14 @@ main { overflow-x: clip; }
 .co-stats:first-child { margin-top: 0; }
 @media (min-width: 1024px) { .co-stats { grid-template-columns: repeat(4, 1fr); gap: 1.5rem; } }
 .stat-card {
-	background: color-mix(in srgb, var(--background) 60%, transparent);
-	backdrop-filter: blur(6px);
-	border: 1px solid var(--border);
+	/* Hairline gold frame: the card fill is painted to the padding box and
+	   the gold gradient to the border box, so only the 1px border carries
+	   the gradient. The fill has to be OPAQUE — a translucent one lets the
+	   border-box gradient flood the whole card. */
+	background:
+		linear-gradient(160deg, color-mix(in srgb, var(--brand) 7%, var(--background)), var(--background)) padding-box,
+		var(--gold-grad-135) border-box;
+	border: 1px solid transparent;
 	padding: 1.5rem;
 	border-radius: 1rem;
 	display: flex;
@@ -1641,7 +1916,7 @@ main { overflow-x: clip; }
 	text-align: center;
 	transition: transform .25s, box-shadow .25s;
 }
-.stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--brand) 30%, transparent); }
 .stat-icon {
 	width: 3.5rem;
 	height: 3.5rem;
@@ -1683,15 +1958,17 @@ main { overflow-x: clip; }
 }
 
 /* ---- Placement Support (container scroll) ---- */
-.placement { overflow-x: clip; }
+.placement { padding: var(--section-y-tight) 0; overflow-x: clip; }
 .container-scroll {
 	position: relative;
-	height: 200vh;
+	height: 140vh;
 }
 .cs-perspective {
 	position: sticky;
-	top: 0;
-	height: 100vh;
+	/* pin below the sticky header, same as .why-stage -- at top:0 the
+	   heading sat behind the nav bar while the section was pinned */
+	top: var(--header-h);
+	height: calc(100vh - var(--header-h) - 2rem);
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -1758,14 +2035,14 @@ main { overflow-x: clip; }
 @media (min-width: 768px) { .placement-item { padding: 2rem; } }
 
 /* ---- 3D Circular Gallery (auto-rotate + drag) ---- */
-.gallery { padding: 0rem 0 2.5rem; overflow-x: clip; }
+.gallery { padding: var(--section-y-tight) 0; overflow-x: clip; }
 .gallery-head { max-width: 50rem; margin: 0 auto; text-align: center; padding: 0 1.5rem; }
 
 .hgallery {
 	position: relative;
 	width: 100%;
 	max-width: 76rem;
-	margin: 3rem auto 0;
+	margin: 1.5rem auto 0;
 	padding: 0 1.5rem;
 	display: flex;
 	align-items: center;
@@ -1836,12 +2113,12 @@ main { overflow-x: clip; }
 
 @media (max-width: 640px) {
 	.hgallery { padding: 0 .4rem; gap: .25rem; }
-	.hg-track { gap: .6rem; }
-	.hg-item { width: 40vw; }
-	.hg-card { height: auto; aspect-ratio: 3 / 4; }
-	.hg-caption { padding: .65rem; }
-	.hg-caption h3 { font-size: .9rem; }
-	.hg-caption p { font-size: .65rem; }
+	.hg-track { gap: .85rem; }
+	.hg-item { width: 74vw; }
+	.hg-card { height: auto; aspect-ratio: 4 / 5; border-radius: 1rem; }
+	.hg-caption { padding: 1rem; }
+	.hg-caption h3 { font-size: 1.15rem; }
+	.hg-caption p { font-size: .78rem; margin-top: .3rem; }
 	.hg-btn { width: 2rem; height: 2rem; }
 	.hg-btn svg { width: 1rem; height: 1rem; }
 
@@ -1870,7 +2147,7 @@ main { overflow-x: clip; }
 
 /* ---- Testimonials ---- */
 .testimonials {
-	padding: 2rem 0 2rem;
+	padding: var(--section-y-tight) 0;
 	background: linear-gradient(to bottom, color-mix(in srgb, var(--brand) 5%, var(--background)), var(--background));
 	overflow: hidden;
 }
@@ -2031,7 +2308,7 @@ main { overflow-x: clip; }
 .t-dot.active { background: var(--brand); width: 1.4rem; }
 
 /* ---- Contact Us (DesignAgency style) ---- */
-.contact { padding: 2rem 0 2.5rem; }
+.contact { padding: var(--section-y) 0; }
 .contact-container {
 	max-width: var(--wrap);
 	margin: 0 auto;
@@ -2040,7 +2317,7 @@ main { overflow-x: clip; }
 	border-radius: 1.75rem;
 	background: linear-gradient(160deg, var(--background), color-mix(in srgb, var(--brand) 4%, var(--background)));
 }
-@media (min-width: 640px) { .contact { padding: 2rem 1.5rem 2.5rem; } }
+@media (min-width: 640px) { .contact { padding: var(--section-y) 1.5rem; } }
 .contact-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
 @media (min-width: 768px) { .contact-grid { grid-template-columns: 1fr 1fr; gap: 3rem; } }
 
@@ -2136,7 +2413,7 @@ main { overflow-x: clip; }
 .da-submit { width: 100%; border-radius: 9999px; height: 2.75rem; }
 
 /* ---- CTA bar (image banner, content on right) ---- */
-.cta-bar { padding: 0 1.5rem 1.5rem; }
+.cta-bar { padding: 0 1.5rem var(--section-y); }
 .cta-inner {
 	max-width: var(--wrap);
 	margin: 0 auto;
@@ -2424,7 +2701,6 @@ main { overflow-x: clip; }
 	.about-photo-frame { display: none; }
 
 	/* 2) compact course cards (icon + card take less space) */
-	.about { padding: 3rem 0 2rem; }
 	/* One horizontally scrolling row rather than three stacked cards, so the
 	   section stays a screenful. Negative margins + matching padding let the
 	   row bleed to the screen edges while the first card still lines up with
@@ -2454,8 +2730,7 @@ main { overflow-x: clip; }
 	.course-title { margin-top: .9rem; font-size: 1.05rem; }
 	.course-desc { margin-top: .5rem; }
 
-	/* 3) reduce empty gap before the Courses section */
-	.courses { padding: 2.5rem 0 3.5rem; }
+
 }
 
 
@@ -2472,7 +2747,7 @@ main { overflow-x: clip; }
 .about-hero h1 em { font-style: italic; color: #D8B45A; }
 .about-hero p { margin-top: 1.25rem; max-width: 42rem; font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,.85); }
 
-.ab-section { padding: 2.25rem 0; }
+.ab-section { padding: var(--section-y) 0; }
 .ab-section.tint { background: linear-gradient(to bottom, color-mix(in srgb, var(--brand) 5%, var(--background)), var(--background)); }
 .ab-wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
 .ab-head { text-align: center; max-width: 46rem; margin: 0 auto 3rem; }
@@ -2509,7 +2784,7 @@ main { overflow-x: clip; }
 .ab-role svg { width: 1.5rem; height: 1.5rem; color: var(--brand); flex: none; }
 
 /* Contact page map */
-.contact-map-section { padding: 0 0 5rem; }
+.contact-map-section { padding: 0 0 calc(var(--section-y) * 1.5); }
 .contact-map { border-radius: 1rem; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); height: 24rem; }
 .contact-map iframe { display: block; width: 100%; height: 100%; }
 
@@ -2524,7 +2799,7 @@ main { overflow-x: clip; }
 .blog-cat:hover { border-color: var(--brand); color: var(--brand); }
 .blog-cat.active { background: var(--brand); color: #fff; border-color: var(--brand); }
 
-.blog-section { padding: 3.5rem 0 5rem; }
+.blog-section { padding: var(--section-y) 0 calc(var(--section-y) * 1.5); }
 
 /* featured post */
 .blog-featured { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; margin-bottom: 4rem; }
@@ -2657,10 +2932,10 @@ main { overflow-x: clip; }
 
 /* Placements page — tighter spacing */
 .pl-page .blog-head { padding-bottom: 1rem; }
-.pl-page .career { padding: 2.25rem 0; }
+.pl-page .career { padding: var(--section-y) 0; }
 .pl-page .career .career-inner { padding-top: 0; padding-bottom: 0; }
 .pl-page .co-stats { margin-top: 0; }
-.pl-page .ab-section { padding: 2.25rem 0; }
+.pl-page .ab-section { padding: var(--section-y) 0; }
 
 /* Placements — mobile: smaller gallery images + compact stats */
 @media (max-width: 600px) {
@@ -2678,8 +2953,10 @@ main { overflow-x: clip; }
 }
 
 /* ===== Black & Gold theme adjustments ===== */
-/* Homepage hero photo has magenta baked in — desaturate for a luxe B&W-on-black look */
-.hero-photo img { filter: grayscale(1) brightness(.9) contrast(1.05); }
+/* The original homepage hero photo has magenta baked in — desaturate that
+   one for a luxe B&W-on-black look. The other slides are already gold-on-
+   black artwork, so they keep their colour. */
+.hero-slide--tinted { filter: grayscale(1) brightness(.9) contrast(1.05); }
 /* Header wordmark is already gold artwork on transparent — no tint needed */
 .logo img { filter: none; }
 
@@ -2958,7 +3235,6 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 }
 
 /* ---- section rhythm: alternate tints get a soft gold wash ---- */
-.ab-section { padding: 3rem 0; }
 .ab-section.tint {
 	background:
 		radial-gradient(60% 100% at 50% 0%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 70%),
@@ -3402,4 +3678,59 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.dropdown-panel .list-item,
 	.dropdown-panel .list-item .text { min-width: 0; }
 	.dropdown-panel .list-item .desc { display: none; }
+}
+
+/* ===== Mobile: home hero only =====
+   Scales the hero lockup down ~25% and tightens its gaps, so the copy sits
+   lower with photo showing above it. Appended last: the site-wide gold-foil
+   heading rules re-declare .hero-title, so an earlier rule loses on order. */
+@media (max-width: 640px) {
+	/* One screenful: the whole hero — copy, both CTAs and the slide arrows —
+	   fits without scrolling. svh keeps it right while the URL bar collapses. */
+	.hero { height: 100svh; min-height: 100svh; max-height: 100svh; }
+	.hero-inner {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		padding-top: 5rem;
+		/* clamp keeps the copy off the bottom on tall phones without pushing
+		   it off-screen on short ones, since the hero can no longer grow */
+		padding-bottom: calc(clamp(2.25rem, 10.5svh, 6rem) + env(safe-area-inset-bottom, 0px));
+	}
+	.hero-content { width: 100%; }
+	/* portrait crops: keep the subject's face above the copy */
+	.hero-photo img { object-position: center top; }
+	/* the side-to-side scrim does nothing once the copy sits at the bottom —
+	   add a bottom-up one so the CTAs stay legible over pale photos */
+	.hero-photo::after {
+		background:
+			linear-gradient(to top, rgba(11, 11, 12, .92) 0%, rgba(11, 11, 12, .72) 32%, rgba(11, 11, 12, .18) 58%, transparent 78%),
+			linear-gradient(to right, rgba(11, 11, 12, .5), rgba(11, 11, 12, .15) 60%, transparent);
+	}
+
+	.hero-eyebrow { font-size: .62rem; letter-spacing: .18em; }
+	/* the trailing rule stranded itself beside a two-line eyebrow on phones */
+	.hero-eyebrow::after { display: none; }
+	.hero-title { margin-top: .9rem; }
+	.hero-title--sculpt .ht-sculpt { font-size: clamp(2.2rem, 9.5vw, 3.4rem); }
+	.hero-title--sculpt .ht-future { font-size: clamp(1.3rem, 5.4vw, 2rem); }
+	.hero-title--sculpt .ht-with { margin-top: .4em; font-size: clamp(.8rem, 3.4vw, 1rem); }
+	.hero-sub { margin-top: .9rem; font-size: .85rem; line-height: 1.55; }
+	.hero-location { margin-top: 1.1rem; font-size: .75rem; }
+	.hero-location svg { width: .9rem; height: .9rem; }
+
+	/* No room for the arrows in a single-screen hero, and they sat on the
+	   model's face — drop them on phones; the slideshow still auto-advances. */
+	.hero-nav { display: none; }
+
+	/* Keep the phone hero in colour — the grayscale tint exists only to tame
+	   the magenta cast in the desktop PNG, which mobile no longer loads. */
+	.hero-slide--tinted { filter: brightness(.92) contrast(1.03); }
+
+	/* Close the dead band between the hero and "Know more about us". The hero's
+	   own bottom padding has to stay — it is what keeps the location line on
+	   screen inside the fixed-height hero — so trim the next section instead. */
+	.about { padding-top: 1.25rem; }
+	.about-cols { gap: 1.75rem; }
 }

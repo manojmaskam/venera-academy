@@ -359,8 +359,11 @@ if (trText && trWrap) {
 		const rect = scrollEl.getBoundingClientRect();
 		// pinned for (track height - stage height) of scrolling
 		const stageH = stage ? stage.offsetHeight : window.innerHeight;
-		const scrollable = scrollEl.offsetHeight - stageH;
-		const scrolled = Math.min(Math.max(-rect.top, 0), scrollable);
+		// the stage pins at `top: var(--header-h)`, so the reveal starts when
+		// the track reaches that line rather than the viewport edge
+		const pinTop = stage ? (parseFloat(getComputedStyle(stage).top) || 0) : 0;
+		const scrollable = scrollEl.offsetHeight - stageH - pinTop;
+		const scrolled = Math.min(Math.max(pinTop - rect.top, 0), Math.max(scrollable, 0));
 		// finish the reveal a touch before the block unpins so the words are
 		// fully filled by the time the grid below scrolls into view
 		const raw = scrollable > 0 ? scrolled / scrollable : 0;
@@ -572,10 +575,13 @@ if (csContainer && csCard && csHeader) {
 			return;
 		}
 		const rect = csContainer.getBoundingClientRect();
-		const vh = window.innerHeight;
-		// progress 0 when container top hits viewport top, 1 when bottom hits viewport bottom
-		const range = rect.height - vh;
-		const p = range > 0 ? Math.min(Math.max(-rect.top / range, 0), 1) : 1;
+		const stage = csContainer.querySelector('.cs-perspective');
+		// the stage pins at `top: var(--header-h)`, so progress is measured
+		// from that line rather than the viewport edge
+		const pinTop = stage ? (parseFloat(getComputedStyle(stage).top) || 0) : 0;
+		const stageH = stage ? stage.offsetHeight : window.innerHeight;
+		const range = rect.height - stageH - pinTop;
+		const p = range > 0 ? Math.min(Math.max((pinTop - rect.top) / range, 0), 1) : 1;
 
 		const rotate = lerp(20, 0, p);          // rotateX 20deg -> 0
 		const scale = lerp(1.05, 1, p);
@@ -750,3 +756,45 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	});
 	document.addEventListener('click', function () { wrap.classList.remove('open'); });
 });
+
+/* ---- Hero slideshow: cross-fade every 5s, with prev/next controls ---- */
+(function () {
+	var photo = document.querySelector('.hero-photo');
+	if (!photo) return;
+	var slides = photo.querySelectorAll('.hero-slide');
+	if (slides.length < 2) return;
+
+	var hero = photo.closest('.hero');
+	var prev = hero.querySelector('.hero-nav--prev');
+	var next = hero.querySelector('.hero-nav--next');
+	var index = 0;
+	var timer = null;
+	var DELAY = 5000;
+
+	function show(i) {
+		index = (i + slides.length) % slides.length;
+		slides.forEach(function (s, n) { s.classList.toggle('is-active', n === index); });
+	}
+	function go(step) { show(index + step); start(); }
+	function start() {
+		stop();
+		// autoplay is motion the visitor did not ask for — honour the setting
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		timer = setInterval(function () { show(index + 1); }, DELAY);
+	}
+	function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+	if (prev) prev.addEventListener('click', function () { go(-1); });
+	if (next) next.addEventListener('click', function () { go(1); });
+
+	// pause while the visitor is reading or tabbing through the hero
+	hero.addEventListener('mouseenter', stop);
+	hero.addEventListener('mouseleave', start);
+	hero.addEventListener('focusin', stop);
+	hero.addEventListener('focusout', start);
+	document.addEventListener('visibilitychange', function () {
+		if (document.hidden) stop(); else start();
+	});
+
+	start();
+})();
