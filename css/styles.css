@@ -3726,27 +3726,28 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
    lower with photo showing above it. Appended last: the site-wide gold-foil
    heading rules re-declare .hero-title, so an earlier rule loses on order. */
 @media (max-width: 640px) {
-	/* Phones show the photo at its own 2:1, the way a desktop does. A 375px
-	   screen makes that panel ~190px tall, which no overlaid headline fits
-	   inside — so the photo becomes a banner and the copy stacks beneath it
-	   rather than being cropped into a zoomed slice to make room. */
-	.hero { height: auto; min-height: 0; max-height: none; display: block; }
-	.hero-photo {
-		position: relative;
-		aspect-ratio: 2 / 1;
-		background: #0B0B0C;
-	}
-	.hero-photo img { object-position: right center; }
-	/* nothing sits on the photo now, so the scrim only has to seat it
-	   against the copy below */
+	/* Copy sits on the photo, as it does on every other breakpoint. A 2:1
+	   panel is only ~190px tall on a 375px screen, too shallow to hold a
+	   headline, so the phone panel is 4:3 — deep enough for the lockup while
+	   still showing the subject rather than a zoomed slice of her. */
+	.hero { height: auto; min-height: 0; max-height: none; }
+	.hero-photo { aspect-ratio: 3 / 4; background: #0B0B0C; }
+	.hero-photo img { object-position: 72% center; }
+	/* the photo runs behind the copy, so the scrim has to carry the text:
+	   dark from the bottom, lighter over the subject */
 	.hero-photo::after {
-		background: linear-gradient(to bottom, transparent 55%, rgba(11, 11, 12, .55) 88%, #0B0B0C 100%);
+		background:
+			linear-gradient(to top, rgba(11, 11, 12, .94) 0%, rgba(11, 11, 12, .78) 34%, rgba(11, 11, 12, .22) 62%, transparent 82%),
+			linear-gradient(to right, rgba(11, 11, 12, .45), rgba(11, 11, 12, .1) 65%, transparent);
 	}
 	.hero-inner {
-		display: block;
-		height: auto;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
 		min-height: 0;
-		padding: 1.5rem 1.25rem calc(2.25rem + env(safe-area-inset-bottom, 0px));
+		height: auto;
+		padding: 4rem 1.25rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
 	}
 	.hero-content { width: 100%; }
 
@@ -3866,4 +3867,13 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.cm-group--split .cm-shot img,
 	.cm-group--split.cm-group--flip .cm-shot img { transform: rotate(.8deg); }
 	.cm-group--split .cm-shot::before { inset: 0 0 1rem 1rem; }
+}
+
+/* The phone hero stacks the photo and the copy in normal flow, so pull the
+   copy back over the photo and let the panel take its height from whichever
+   is taller. */
+@media (max-width: 640px) {
+	.hero { display: grid; }
+	.hero-photo, .hero-inner { grid-area: 1 / 1; }
+	.hero-photo { position: relative; }
 }
