@@ -3833,5 +3833,5 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.about-title { order: 2; }
 	.about-col-left .about-text { order: 3; }
 	.about-col-right { order: 4; margin-inline: 0; }
-	.about-btn { order: 5; justify-self: start; align-self: start; }
+	.about-btn { order: 5; align-self: center; }
 }
