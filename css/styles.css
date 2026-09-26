@@ -1133,7 +1133,7 @@ ul { list-style: none; }
 		min-height: 50vw;
 		display: flex;
 		align-items: center;
-		padding: 2.25rem 4.25rem;
+		padding: 2.25rem 1.5rem;
 	}
 }
 @media (min-width: 1024px) {
@@ -1495,7 +1495,16 @@ main { overflow-x: clip; }
 	.reveal-left, .reveal-right { transform: translateY(40px); }
 }
 
-.about-head { max-width: 50rem; margin: 0 auto; text-align: center; }
+/* 50rem forced the long course/why headings onto two lines even on a wide
+   screen — they need ~1275px and had 1000px. The wrap gives them the room;
+   the title also scales with the window so it still fits one line further
+   down, and only wraps where it genuinely cannot. */
+.about-head { max-width: var(--wrap); margin: 0 auto; text-align: center; }
+.about-head .about-text, .gallery-head .about-text { max-width: 50rem; margin-inline: auto; }
+@media (min-width: 641px) {
+	.about-head .section-title,
+	.gallery-head .section-title { font-size: clamp(1.9rem, 3.6vw, 2.5rem); }
+}
 .section-eyebrow {
 	display: inline-block;
 	font-size: .8rem;
@@ -1706,7 +1715,7 @@ main { overflow-x: clip; }
 
 /* ---- Why Choose Us ---- */
 .why { padding: var(--section-y-tight) 0; }
-.why-head { max-width: 50rem; margin: 0 auto; text-align: center; padding: 0 1.5rem; }
+.why-head { max-width: var(--wrap); margin: 0 auto; text-align: center; padding: 0 1.5rem; }
 
 /* Pinned scroll stage: heading + reveal + reasons stay together while scrolling */
 .why-track { position: relative; height: 150vh; }
@@ -3790,20 +3799,28 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-location { margin-top: 1.1rem; font-size: .82rem; }
 }
 
-/* ===== Small laptops: hold the hero at the photo's ratio =====
-   Same reasoning as the tablet range. At 1024px a 2:1 panel is ~512px tall
-   and the full-size lockup is ~470px plus padding, so the copy pushed the
-   frame back to 1.45:1. A step between the tablet and desktop scales lets
-   it sit inside the panel. */
-@media (min-width: 1024px) and (max-width: 1279px) {
-	/* below ~1250px the wrap runs edge to edge, so the slide arrows land on
-	   the headline unless the copy is inset past them */
-	.hero-inner { padding-left: 4.25rem; padding-right: 4.25rem; }
-	.hero-title--sculpt .ht-sculpt { font-size: 4.75rem; }
-	.hero-title--sculpt .ht-future { font-size: 2.6rem; }
-	.hero-title--sculpt .ht-with { font-size: 1.15rem; }
+/* ===== Laptops upward: hold the hero at the photo's ratio =====
+   At 1024px a 2:1 panel is ~512px tall and the full-size lockup is taller
+   than that, so the copy pushed the frame back to 1.45:1. The type is
+   interpolated rather than stepped — a hard boundary at 1279px snapped the
+   headline from 84px to 130px — so each value grows with the window and
+   lands on its full desktop size at 1440px, where there is room for it. */
+@media (min-width: 1024px) {
+	.hero-eyebrow { font-size: clamp(.74rem, calc(.29vw + .44rem), .8rem); }
 	.hero-title { margin-top: 1.1rem; }
-	.hero-sub { margin-top: 1rem; font-size: 1rem; }
-	.hero-actions { margin-top: 1.75rem; }
-	.hero-location { margin-top: 1.25rem; }
+	.hero-title--sculpt .ht-sculpt { font-size: clamp(3.9rem, calc(12.26vw - 2.33rem), 6.5rem); }
+	.hero-title--sculpt .ht-future { font-size: clamp(2.1rem, calc(7.21vw - 1.59rem), 3.6rem); }
+	.hero-title--sculpt .ht-with { font-size: clamp(1rem, calc(2.4vw - .23rem), 1.5rem); }
+	.hero-sub { margin-top: 1rem; font-size: clamp(.9rem, calc(.72vw + .53rem), 1.05rem); }
+	.hero-actions { margin-top: clamp(1.75rem, 2.4vw, 2.5rem); gap: clamp(1rem, 1.2vw, 1.5rem); }
+	.hero-cta {
+		padding: clamp(.9rem, .96vw, 1rem) clamp(1.75rem, 2.4vw, 2rem);
+		font-size: clamp(.8rem, .29vw + .5rem, .85rem);
+	}
+	.hero-location { margin-top: clamp(1.25rem, 2vw, 2rem); font-size: clamp(.85rem, .58vw + .48rem, .9rem); }
+	.hero-location svg { width: clamp(.95rem, .5vw, 1.05rem); height: clamp(.95rem, .5vw, 1.05rem); }
+}
+}
+
+
 }

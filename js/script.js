@@ -769,10 +769,8 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 	var next = hero.querySelector('.hero-nav--next');
 	var index = 0;
 	var timer = null;
-	// phones get a quicker rotation — the hero fills the whole screen there,
-	// so a slide that lingers is the only thing the visitor is looking at
 	var PHONE = window.matchMedia('(max-width: 640px)');
-	function delay() { return PHONE.matches ? 3000 : 5000; }
+	var DELAY = 3000;
 
 	// some slides only earn their place on a phone — CSS hides them above the
 	// breakpoint, so the rotation has to skip them or it plays a blank beat
@@ -792,7 +790,7 @@ document.querySelectorAll('.da-form select').forEach(function (sel) {
 		stop();
 		// autoplay is motion the visitor did not ask for — honour the setting
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-		timer = setInterval(function () { show(index + 1); }, delay());
+		timer = setInterval(function () { show(index + 1); }, DELAY);
 	}
 	function stop() { if (timer) { clearInterval(timer); timer = null; } }
 
