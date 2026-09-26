@@ -3911,7 +3911,9 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
    what each course is. */
 @media (max-width: 767px) {
 	.mobile-menu-inner { padding: .75rem 1rem; gap: .35rem; }
-	.mobile-links { gap: .15rem; }
+	/* the link list takes the slack, so a tall phone spreads the rows out
+	   instead of leaving a hole above Contact Us */
+	.mobile-links { flex: 1 1 auto; justify-content: space-between; gap: .15rem; }
 	.mobile-link { padding: .5rem .25rem; font-size: 1rem; }
 	.mobile-section { margin-top: .25rem; }
 	.mobile-menu .list-item { padding: .35rem .4rem; gap: .6rem; }
@@ -3925,4 +3927,17 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.mobile-menu .list-item .text .desc { display: none; }
 	.mobile-menu .list-item { padding: .3rem .4rem; }
 	.mobile-menu .list-item .icon-box { width: 2rem; height: 2rem; }
+}
+
+/* Taller phones have room for a roomier drawer — bigger rows and labels,
+   which fills the panel rather than stretching the gaps between small ones. */
+@media (max-width: 767px) and (min-height: 741px) {
+	.mobile-menu-inner { padding: 1rem; }
+	.mobile-link { padding: .7rem .25rem; font-size: 1.1rem; }
+	.mobile-menu .list-item { padding: .55rem .45rem; gap: .7rem; }
+	.mobile-menu .list-item .icon-box { width: 2.6rem; height: 2.6rem; }
+	.mobile-menu .list-item .icon-box svg { width: 1.2rem; height: 1.2rem; }
+	.mobile-menu .list-item .text .title { font-size: 1rem; }
+	.mobile-menu .list-item .text .desc { font-size: .8rem; }
+	.mobile-section { font-size: 1rem; }
 }
