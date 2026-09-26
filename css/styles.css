@@ -1137,7 +1137,15 @@ ul { list-style: none; }
 	}
 }
 @media (min-width: 1024px) {
-	.hero-inner { min-height: 88vh; padding: 7rem 1.5rem; }
+	/* Laptops get the same frame as a large desktop. 88vh alone tied the
+	   panel to screen height, so a short 1024x768 laptop produced a much
+	   squarer frame and a more cropped photo than a 1440 monitor; min()
+	   keeps it at the photo's 2:1 and only falls back to viewport height
+	   on a very wide screen. Padding scales with width for the same reason. */
+	.hero-inner {
+		min-height: min(50vw, 88vh);
+		padding: clamp(2.5rem, 4vw, 7rem) 1.5rem;
+	}
 }
 
 .hero-content { max-width: 36rem; text-align: left; }
@@ -1456,8 +1464,14 @@ ul { list-style: none; }
    which is sized off the column, in register with the photo. */
 /* Smaller than the text column and flush with its top edge, so the two
    columns start on the same line rather than the photo towering over it. */
-.about-col-right { position: relative; max-width: 24rem; margin-inline: auto; }
-@media (min-width: 768px) { .about-col-right { margin-inline: 0 auto; } }
+.about-col-right { position: relative; max-width: 30rem; margin-inline: auto; }
+/* the feature block owns this column now, so it sets its own width */
+.about-col-right .about-feature { margin-top: 0; max-width: none; }
+/* Visual order is image first, copy second — the markup keeps the copy
+   first so it is still what a screen reader and a crawler meet first. */
+.about-col-right { order: -1; }
+.about-col-left { order: 0; }
+@media (min-width: 768px) { .about-col-right { margin-inline: auto 0; } }
 .about-photo { display: block; width: 100%; border-radius: .3rem; box-shadow: 0 25px 55px -20px rgba(0,0,0,.35); position: relative; z-index: 1; }
 .about-photo-frame {
 	position: absolute; top: -1.25rem; left: -1.25rem; width: 100%; height: 100%;
@@ -3774,4 +3788,22 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-actions { margin-top: 1.5rem; }
 	.hero-cta { padding: .85rem 1.6rem; font-size: .78rem; }
 	.hero-location { margin-top: 1.1rem; font-size: .82rem; }
+}
+
+/* ===== Small laptops: hold the hero at the photo's ratio =====
+   Same reasoning as the tablet range. At 1024px a 2:1 panel is ~512px tall
+   and the full-size lockup is ~470px plus padding, so the copy pushed the
+   frame back to 1.45:1. A step between the tablet and desktop scales lets
+   it sit inside the panel. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+	/* below ~1250px the wrap runs edge to edge, so the slide arrows land on
+	   the headline unless the copy is inset past them */
+	.hero-inner { padding-left: 4.25rem; padding-right: 4.25rem; }
+	.hero-title--sculpt .ht-sculpt { font-size: 4.75rem; }
+	.hero-title--sculpt .ht-future { font-size: 2.6rem; }
+	.hero-title--sculpt .ht-with { font-size: 1.15rem; }
+	.hero-title { margin-top: 1.1rem; }
+	.hero-sub { margin-top: 1rem; font-size: 1rem; }
+	.hero-actions { margin-top: 1.75rem; }
+	.hero-location { margin-top: 1.25rem; }
 }
