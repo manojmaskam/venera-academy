@@ -736,6 +736,9 @@ img {
 /* Section rhythm scales with the viewport: tighter on phones, roomier on
    desktop, but always one value so every boundary matches. */
 @media (min-width: 768px) { :root { --section-y: 3rem; --section-y-tight: 1.5rem; } }
+/* tablets sit between the two: the 768px step gave them desktop-sized
+   section padding on a much shorter screen */
+@media (min-width: 641px) and (max-width: 1023px) { :root { --section-y: 2rem; --section-y-tight: 1rem; } }
 @media (min-width: 1200px) { :root { --section-y: 3.5rem; --section-y-tight: 1.75rem; } }
 
 
@@ -1933,7 +1936,10 @@ main { overflow-x: clip; }
    the band stands alone in its section (about.html) there is nothing to
    separate it from, so the margin is just dead space. */
 .co-stats:first-child { margin-top: 0; }
-@media (min-width: 1024px) { .co-stats { grid-template-columns: repeat(4, 1fr); gap: 1.5rem; } }
+/* four across from tablet up: two rows of two left a tall block of cards
+   with a lot of air under it */
+@media (min-width: 641px) { .co-stats { grid-template-columns: repeat(4, 1fr); gap: .75rem; margin-top: 2.5rem; } }
+@media (min-width: 1024px) { .co-stats { gap: 1.5rem; margin-top: 5rem; } }
 .stat-card {
 	/* Hairline gold frame: the card fill is painted to the padding box and
 	   the gold gradient to the border box, so only the 1px border carries
