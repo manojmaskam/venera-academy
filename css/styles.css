@@ -3907,8 +3907,11 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-photo { position: relative; }
 }
 
-/* A break that only exists on phones, so the hero sub-line splits after
-   "Skin," instead of wherever the measure happens to run out. */
+/* .brk-line always breaks — the hero sub-line reads the same at every
+   width, splitting after "Skin," rather than wherever the measure runs
+   out (which put "Beautician courses." alone on a desktop). .brk-phone is
+   the phone-only one, used for the two-line eyebrow. */
+.brk-line { display: inline; }
 .brk-phone { display: none; }
 @media (max-width: 640px) { .brk-phone { display: inline; } }
 
