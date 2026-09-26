@@ -3001,10 +3001,6 @@ main { overflow-x: clip; }
 }
 
 /* ===== Black & Gold theme adjustments ===== */
-/* The original homepage hero photo has magenta baked in — desaturate that
-   one for a luxe B&W-on-black look. The other slides are already gold-on-
-   black artwork, so they keep their colour. */
-.hero-slide--tinted { filter: grayscale(1) brightness(.9) contrast(1.05); }
 /* Header wordmark is already gold artwork on transparent — no tint needed */
 .logo img { filter: none; }
 
@@ -3794,10 +3790,6 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-nav { display: none; }
 
 	.hero-slide--phone { display: block; }
-
-	/* Keep the phone hero in colour — the grayscale tint exists only to tame
-	   the magenta cast in the desktop PNG, which mobile no longer loads. */
-	.hero-slide--tinted { filter: brightness(.92) contrast(1.03); }
 
 	/* Close the dead band between the hero and "Know more about us". The hero's
 	   own bottom padding has to stay — it is what keeps the location line on
