@@ -3850,3 +3850,12 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.about-col-right { order: 4; margin-inline: 0; max-width: none; }
 	.about-btn { order: 5; align-self: center; }
 }
+
+/* ===== Tablets: short-term course photos =====
+   Below 900px the split rows collapse to one column, so a 4:3 photo ran the
+   full width — ~768x576, taller than the checklist it introduces. Cap it to
+   a modest centred block instead. */
+@media (min-width: 641px) and (max-width: 899px) {
+	.cm-group--split .cm-shot { max-width: 24rem; margin-inline: auto; width: 100%; }
+	.cm-group--split .cm-shot img { aspect-ratio: 3 / 2; }
+}
