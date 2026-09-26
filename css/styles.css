@@ -3731,14 +3731,16 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	   headline, so the phone panel is 4:3 — deep enough for the lockup while
 	   still showing the subject rather than a zoomed slice of her. */
 	.hero { height: auto; min-height: 0; max-height: none; }
-	.hero-photo { aspect-ratio: 3 / 4; background: #0B0B0C; }
+	.hero-photo { aspect-ratio: 2 / 3; background: #0B0B0C; }
 	.hero-photo img { object-position: 72% center; }
 	/* the photo runs behind the copy, so the scrim has to carry the text:
 	   dark from the bottom, lighter over the subject */
 	.hero-photo::after {
-		background:
-			linear-gradient(to top, rgba(11, 11, 12, .94) 0%, rgba(11, 11, 12, .78) 34%, rgba(11, 11, 12, .22) 62%, transparent 82%),
-			linear-gradient(to right, rgba(11, 11, 12, .45), rgba(11, 11, 12, .1) 65%, transparent);
+		background: linear-gradient(to top,
+			rgba(11, 11, 12, .92) 0%,
+			rgba(11, 11, 12, .72) 22%,
+			rgba(11, 11, 12, .28) 40%,
+			transparent 56%);
 	}
 	.hero-inner {
 		position: relative;
@@ -3747,7 +3749,7 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 		justify-content: flex-end;
 		min-height: 0;
 		height: auto;
-		padding: 4rem 1.25rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
+		padding: 5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
 	}
 	.hero-content { width: 100%; }
 
@@ -3877,3 +3879,8 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.hero-photo, .hero-inner { grid-area: 1 / 1; }
 	.hero-photo { position: relative; }
 }
+
+/* A break that only exists on phones, so the hero sub-line splits after
+   "Skin," instead of wherever the measure happens to run out. */
+.brk-phone { display: none; }
+@media (max-width: 640px) { .brk-phone { display: inline; } }
