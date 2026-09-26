@@ -3943,4 +3943,24 @@ section[id], [id].about, [id].courses { scroll-margin-top: 6rem; }
 	.mobile-section { font-size: 1rem; }
 }
 
+/* ===== Tablet drawer: a half-width side panel =====
+   Full-bleed reads as a phone menu on a 768px screen, with the links
+   stranded across a very wide row. It slides in from the right instead,
+   under the hamburger that opens it. */
+@media (min-width: 768px) and (max-width: 1023px) {
+	.mobile-menu {
+		left: auto;
+		right: 0;
+		width: 50vw;
+		min-width: 22rem;
+		border-left: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+		background: #0B0B0C;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		box-shadow: -28px 0 70px -28px rgba(0, 0, 0, .95);
+	}
+	.mobile-menu-inner { padding: 1.25rem 1.5rem; }
+	/* a tall panel would otherwise stretch the rows apart */
+	.mobile-links { flex: 0 1 auto; justify-content: flex-start; gap: .2rem; }
+	.mobile-actions { margin-top: 1.5rem; }
 }
