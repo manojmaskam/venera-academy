@@ -43,10 +43,16 @@ form backend (no server needed):
 
 (Formspree or Getform work the same way.)
 
-## Cache busting
+## Caching
 
-CSS/JS are versioned (`styles.css?v=11`, `script.js?v=10`). **Bump the number** on the `<link>`/`<script>`
-tags whenever you edit `styles.css` or `script.js` so browsers load the new file.
+Assets are linked without version params (`css/styles.css`, `js/script.js`) — nothing to bump when
+you edit them. The host serves CSS/JS with `Cache-Control: max-age=7200`, so after a deploy a
+returning visitor may see the previous file for up to two hours before it refreshes on its own.
+HTML is served `max-age=0`, so page changes go live immediately.
+
+If you ever need a change to reach everyone instantly, add a one-off `?v=<date>` to the `<link>`
+and `<script>` tags on every page — and use a value never served before, since reusing an old one
+makes browsers serve that old copy back.
 
 ## Notes
 
